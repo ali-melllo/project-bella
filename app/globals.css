@@ -1,0 +1,269 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262.1 83.3% 57.8%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262.1 83.3% 57.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Neomorphic Design System */
+.neo-card {
+  @apply bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900;
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.1), -8px -8px 16px rgba(255, 255, 255, 0.8);
+}
+
+.dark .neo-card {
+  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.3), -8px -8px 16px rgba(255, 255, 255, 0.05);
+}
+
+.neo-inset {
+  @apply bg-gradient-to-br from-gray-100 to-white dark:from-gray-900 dark:to-gray-800;
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.1), inset -4px -4px 8px rgba(255, 255, 255, 0.8);
+}
+
+.dark .neo-inset {
+  box-shadow: inset 4px 4px 8px rgba(0, 0, 0, 0.3), inset -4px -4px 8px rgba(255, 255, 255, 0.05);
+}
+
+.neo-button {
+  @apply bg-gradient-to-br from-white to-gray-100 dark:from-gray-700 dark:to-gray-800;
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.8);
+  transition: all 0.2s ease;
+}
+
+.neo-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.15), -6px -6px 12px rgba(255, 255, 255, 0.9);
+}
+
+.neo-button:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1), -2px -2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.dark .neo-button {
+  box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(255, 255, 255, 0.05);
+}
+
+.dark .neo-button:hover {
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.4), -6px -6px 12px rgba(255, 255, 255, 0.08);
+}
+
+/* Glass Morphism */
+.glass-card {
+  @apply backdrop-blur-lg bg-white/20 dark:bg-black/20 border border-white/30 dark:border-white/10;
+}
+
+/* Gradient Backgrounds */
+.gradient-bg {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.gradient-primary {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
+}
+
+.gradient-soft {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.gradient-warm {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.gradient-cool {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.gradient-nature {
+  background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
+}
+
+/* Animations */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Responsive Design */
+.mobile-only {
+  @apply block lg:hidden;
+}
+
+.desktop-only {
+  @apply hidden lg:block;
+}
+
+/* Focus Ring */
+.focus-ring {
+  @apply focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:outline-none;
+}
+
+/* Scrollbar Styling */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
+
+/* Magic UI Effects */
+.magic-glow {
+  position: relative;
+  overflow: hidden;
+}
+
+.magic-glow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.magic-glow:hover::before {
+  left: 100%;
+}
+
+/* Avatar Styles */
+.avatar-glow {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Card Hover Effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
+/* Text Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Loading States */
+.skeleton {
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
+}
+
+/* Utility Classes */
+.text-balance {
+  text-wrap: balance;
+}
+
+.container-padding {
+  @apply px-4 sm:px-6 lg:px-8;
+}
+
+.section-spacing {
+  @apply py-12 sm:py-16 lg:py-20;
+}
