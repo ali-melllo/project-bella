@@ -5,7 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import { LanguageProvider } from "@/components/language-provider"
-import { FloatingAssistant } from "@/components/floating-assistant"
+import { SiteHeader } from "@/components/ui/header"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: "BELLA - Smart Real Estate Platform",
   description: "AI-powered real estate platform connecting tenants and property owners",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -30,8 +30,11 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <LanguageProvider>
-            {children}
-            <FloatingAssistant />
+            <div>
+              <SiteHeader />
+              {children}
+            </div>
+            {/* <FloatingAssistant /> */}
             <Toaster />
           </LanguageProvider>
         </ThemeProvider>

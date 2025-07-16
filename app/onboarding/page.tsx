@@ -156,12 +156,12 @@ export default function OnboardingPage() {
               <p className="text-muted-foreground text-lg">Let's personalize your real estate experience</p>
             </div>
 
-            <Card className="neo-card border-0">
+            <Card className="glass-card">
               <CardContent className="p-6">
                 <div className="flex items-start gap-4">
                   <BellaAvatar size="lg" animated />
                   <div className="flex-1">
-                    <div className="p-4 rounded-lg neo-inset">
+                    <div className="p-4 rounded-lg glass-inset">
                       <p className="text-sm leading-relaxed">{getBellaMessage()}</p>
                     </div>
                   </div>
@@ -177,12 +177,14 @@ export default function OnboardingPage() {
                 </span>
                 <span>{Math.round(progress)}% complete</span>
               </div>
-              <Progress value={progress} className="h-2" />
+              <div className="glass-card p-1 rounded-full">
+                <Progress value={progress} className="h-2 bg-transparent" />
+              </div>
             </div>
           </div>
 
           {/* Onboarding Form */}
-          <Card className="neo-card border-0">
+          <Card className="glass-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 {currentStep === 1 && <Globe className="w-5 h-5" />}
@@ -214,12 +216,12 @@ export default function OnboardingPage() {
                       key={lang.code}
                       onClick={() => {
                         setFormData((prev) => ({ ...prev, language: lang.code }))
-                        setLanguage(lang.code)
+                        setLanguage(lang.code as "en" | "es" | "fr" | "de")
                       }}
-                      className={`p-4 rounded-lg border transition-all neo-button ${
+                      className={`p-4 rounded-lg border-2 transition-all glass-button ${
                         formData.language === lang.code
                           ? "border-primary bg-primary/10"
-                          : "border-border hover:border-primary/50"
+                          : "border-transparent hover:border-primary/50"
                       }`}
                     >
                       <div className="text-2xl mb-2">{lang.flag}</div>
@@ -237,10 +239,10 @@ export default function OnboardingPage() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="you@example.com"
+                      placeholder="your@email.com"
                       value={formData.email}
                       onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
-                      className="neo-inset border-0"
+                      className="glass-inset focus-ring"
                     />
                   </div>
                   <div className="space-y-2">
@@ -251,7 +253,7 @@ export default function OnboardingPage() {
                       placeholder="Create a secure password"
                       value={formData.password}
                       onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
-                      className="neo-inset border-0"
+                      className="glass-inset focus-ring"
                     />
                   </div>
                   <div className="flex items-center space-x-2">
@@ -272,10 +274,10 @@ export default function OnboardingPage() {
                       value={formData.nationality}
                       onValueChange={(value) => setFormData((prev) => ({ ...prev, nationality: value }))}
                     >
-                      <SelectTrigger className="neo-inset border-0">
+                      <SelectTrigger className="glass-inset focus-ring">
                         <SelectValue placeholder="Select your nationality" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="glass-card">
                         {nationalities.map((nationality) => (
                           <SelectItem key={nationality} value={nationality}>
                             {nationality}
@@ -289,43 +291,53 @@ export default function OnboardingPage() {
 
               {/* Step 4: Goals */}
               {currentStep === 4 && (
-                <div className="grid grid-cols-1 gap-3">
-                  {goals.map((goal) => (
-                    <button
-                      key={goal.id}
-                      onClick={() => handleGoalToggle(goal.id)}
-                      className={`p-4 rounded-lg border transition-all neo-button text-left ${
-                        formData.goals.includes(goal.id)
-                          ? "border-primary bg-primary/10"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="text-2xl">{goal.icon}</span>
-                        <span className="font-medium">{goal.label}</span>
-                      </div>
-                    </button>
-                  ))}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 gap-3">
+                    {goals.map((goal) => (
+                      <button
+                        key={goal.id}
+                        onClick={() => handleGoalToggle(goal.id)}
+                        className={`p-4 rounded-lg border-2 transition-all text-left glass-button ${
+                          formData.goals.includes(goal.id)
+                            ? "border-primary bg-primary/10"
+                            : "border-transparent hover:border-primary/50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{goal.icon}</span>
+                          <span className="font-medium">{goal.label}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground">Select all that apply</p>
                 </div>
               )}
 
               {/* Step 5: Interests */}
               {currentStep === 5 && (
-                <div className="grid grid-cols-2 gap-3">
-                  {interests.map((interest) => (
-                    <button
-                      key={interest.id}
-                      onClick={() => handleInterestToggle(interest.id)}
-                      className={`p-3 rounded-lg border transition-all neo-button text-left ${
-                        formData.interests.includes(interest.id)
-                          ? "border-primary bg-primary/10"
-                          : "border-border hover:border-primary/50"
-                      }`}
-                    >
-                      <div className="text-lg mb-1">{interest.icon}</div>
-                      <div className="text-sm font-medium">{interest.label}</div>
-                    </button>
-                  ))}
+                <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-3">
+                    {interests.map((interest) => (
+                      <button
+                        key={interest.id}
+                        onClick={() => handleInterestToggle(interest.id)}
+                        className={`p-3 rounded-lg border-2 transition-all text-left glass-button ${
+                          formData.interests.includes(interest.id)
+                            ? "border-primary bg-primary/10"
+                            : "border-transparent hover:border-primary/50"
+                        }`}
+                      >
+                        <div className="text-center">
+                          <div className="text-xl mb-1">{interest.icon}</div>
+                          <div className="text-sm font-medium">{interest.label}</div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Choose your interests to connect with like-minded neighbors
+                  </p>
                 </div>
               )}
 
@@ -335,16 +347,12 @@ export default function OnboardingPage() {
                   variant="outline"
                   onClick={handleBack}
                   disabled={currentStep === 1}
-                  className="neo-button bg-transparent"
+                  className="glass-button bg-transparent"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
                 </Button>
-                <Button
-                  onClick={handleNext}
-                  disabled={!isStepValid()}
-                  className="neo-button bg-primary text-primary-foreground"
-                >
+                <Button onClick={handleNext} disabled={!isStepValid()} className="glass-button">
                   {currentStep === totalSteps ? "Complete Setup" : "Next"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
