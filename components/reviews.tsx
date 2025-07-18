@@ -39,11 +39,7 @@ const ReviewCard = ({
   return (
     <figure
       className={cn(
-        "relative h-full w-64 cursor-pointer overflow-hidden rounded-xl border p-4",
-        // light styles
-        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-        // dark styles
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]",
+        "relative h-full md:w-64 cursor-pointer overflow-hidden border p-4 bg-background rounded-2xl [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
       )}
     >
       <div className="flex flex-row items-center gap-2">
@@ -55,7 +51,7 @@ const ReviewCard = ({
           <p className="text-xs font-medium dark:text-white/40">{username}</p>
         </div>
       </div>
-      <blockquote className="mt-2 text-sm">{body}</blockquote>
+      <blockquote className="mt-2 text-xs md:text-sm">{body}</blockquote>
     </figure>
   );
 };
@@ -73,12 +69,12 @@ export function ReviewsPage() {
           <ReviewCard key={review.username} {...review} />
         ))}
       </Marquee>
-      <Marquee vertical className="[--duration:10s]">
+      <Marquee vertical className="[--duration:10s] hidden md:block">
         {firstRow.map((review) => (
           <ReviewCard key={review.username} {...review} />
         ))}
       </Marquee>
-      <Marquee reverse vertical className="[--duration:10s]">
+      <Marquee reverse vertical className="[--duration:10s] hidden md:block">
         {secondRow.map((review) => (
           <ReviewCard key={review.username} {...review} />
         ))}

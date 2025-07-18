@@ -95,7 +95,7 @@ export function SiteHeader() {
     >
       <motion.div
         className={cn(
-          "mx-auto px-6 !py-2 transition-all md:py-5 duration-500 ease-in-out",
+          "mx-auto md:px-6 !py-2 transition-all md:py-5 duration-500 ease-in-out",
           isScrolled
             ? "max-w-7xl md:mt-2 bg-background/95 backdrop-blur-lg shadow-lg border border-border/50 rounded-2xl"
             : "max-w-full",
@@ -119,7 +119,7 @@ export function SiteHeader() {
                 src={'/bella.avif'}
               />
             </motion.div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+            <span className="md:text-2xl font-bold text-muted-foreground">
               Bella AI
             </span>
           </Link>

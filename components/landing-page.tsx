@@ -33,6 +33,8 @@ import {
   Linkedin,
   Bot,
   Home,
+  MessageCircleIcon,
+  Settings,
 } from "lucide-react"
 import { SparklesText } from "@/components/ui/sparkles-text"
 import { WordRotate } from "@/components/ui/word-rotate"
@@ -236,12 +238,12 @@ export function LandingPage() {
 
     <>
 
-      <section className="relative min-h-screen w-full flex z-20 items-center overflow-x-hidden pt-16 mb-20 px-20">
+      <section className="relative min-h-screen w-full flex z-20 items-center overflow-x-hidden md:pt-16 mb-20 px-3 md:px-20">
 
-        <div className="w-full absolute flex justify-center top-20 z-20">
+        <div className="w-full absolute flex justify-center top-28 md:top-24 z-20">
           <Badge
             variant="secondary"
-            className="md:px-8 flex justify-center  w-auto mx-auto items-center py-2  rounded-3xl text-xs md:text-base font-medium bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
+            className="md:px-8 flex justify-center w-auto mx-auto items-center py-2  rounded-3xl text-xs md:text-base font-medium bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
           >
             <AnimatedShinyText>AI-Powered Living Platform</AnimatedShinyText>
           </Badge>
@@ -253,7 +255,7 @@ export function LandingPage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1920&h=1080&fit=crop&crop=focalpoint&auto=format&q=80"
-            alt="Luxurious salon interior"
+            alt="Bella"
             fill
             className="object-cover"
             priority
@@ -263,7 +265,7 @@ export function LandingPage() {
 
         <div className="flex justify-start items-center relative z-10">
           <div className="w-full  text-white">
-            <BlurIn className="flex font-extrabold items-center text-5xl md:text-7xl mx-auto">
+            <BlurIn className="flex font-extrabold items-center text-2xl md:text-7xl mx-auto">
               <h1 className="my-6 text-nowrap">Find Your Perfect</h1>
 
               <span
@@ -279,33 +281,48 @@ export function LandingPage() {
             </BlurIn>
 
             <FadeIn delay={0.2}>
-              <p className=" text-gray-600 dark:text-gray-300 mb-8 text-balance">
+              <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-8 text-balance">
                 Discover verified properties, connect with trusted landlords, and find your ideal living space with
                 our AI-powered platform.
               </p>
             </FadeIn>
 
             <SlideIn delay={0.4}>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="grid grid-cols-2 gap-4 w-full md:w-7/12">
                 <Link href="/explore">
                   <Button
                     size="lg"
-                    className="bg-primary rounded-xl text-white border-0 text-lg px-8 py-4"
+                    className="bg-primary  rounded-xl h-14 w-full text-white border-0 text-xs md:text-lg px-8 py-4"
                   >
                     Explore Properties
                     <ArrowRight className="ml-2" size={20} />
                   </Button>
                 </Link>
                 <Link href="/auth/signup">
-                  <Button size="lg" className="rounded-xl font-medium text-foreground text-lg px-8 py-4 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+                  <Button size="lg" className="rounded-xl h-14 w-full  font-medium text-foreground text-xs md:text-lg px-8 py-4 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
                     List Your Property
                     <Home className="ml-2" size={20} />
+                  </Button>
+                </Link>
+                <Link href="/explore">
+                  <Button
+                    size="lg"
+                    className="bg-primary rounded-xl h-14 w-full  text-white border-0 text-xs md:text-lg px-8 py-4"
+                  >
+                      Chat With Bella Ai
+                     <MessageCircleIcon className="ml-2" size={20} />
+                  </Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button size="lg" className="rounded-xl h-14 w-full  font-medium text-foreground text-xs md:text-lg px-8 py-4 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+                    Publish Your Service
+                    <Settings className="ml-2" size={20} />
                   </Button>
                 </Link>
               </div>
             </SlideIn>
 
-            <div className="mt-12 flex items-center space-x-4">
+            <div className="mt-12 flex flex-col md:flex-row md:items-center md:space-x-4">
               <div className="flex -space-x-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div key={i} className="w-12 h-12 rounded-full border-2 border-white overflow-hidden">
@@ -319,7 +336,7 @@ export function LandingPage() {
                   </div>
                 ))}
               </div>
-              <div>
+              <div className="mt-3 md:mt-0">
                 <div className="text-yellow-400 flex text-2xl">{"★★★★★"}</div>
                 <p className="text-sm text-gray-300">Trusted by 10,000+ happy clients</p>
               </div>
@@ -484,7 +501,7 @@ export function LandingPage() {
               </motion.div>
             </div>
 
-            <ReviewsPage/>
+            <ReviewsPage />
           </div>
         </section>
 
@@ -518,11 +535,11 @@ export function LandingPage() {
                   viewport={{ once: true }}
                 >
                   <Card
-                    className={`glass-card hover:bg-transparent h-full relative ${plan.popular ? "ring-2 ring-purple-500" : ""}`}
+                    className={`bg-background rounded-2xl [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] flex flex-col relative ${plan.popular ? "ring-2 scale-105 ring-primary" : ""}`}
                   >
                     {plan.popular && (
                       <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                        <Badge className="bg-gradient-primary text-white">Most Popular</Badge>
+                        <Badge className="bg-primary text-white">Most Popular</Badge>
                       </div>
                     )}
                     <CardHeader className="text-center">
@@ -530,7 +547,7 @@ export function LandingPage() {
                       <div className="text-4xl font-bold text-gradient my-4">{plan.price}</div>
                       <CardDescription>{plan.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="space-y-4 flex flex-col ">
+                    <CardContent className="space-y-4 h-80  flex flex-col justify-between ">
                       {plan.features.map((feature, featureIndex) => (
                         <div key={featureIndex} className="flex items-center">
                           <CheckCircle className="w-5 h-5 text-green-500 mr-3" />
@@ -671,7 +688,7 @@ export function LandingPage() {
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 glass-button rounded-lg flex items-center justify-center">
-                        <Phone className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        <Phone className="size-10 stroke-primary" />
                       </div>
                       <div>
                         <h3 className="font-semibold">Phone</h3>
@@ -685,7 +702,7 @@ export function LandingPage() {
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 glass-button rounded-lg flex items-center justify-center">
-                        <Mail className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        <Mail className="size-10 stroke-primary" />
                       </div>
                       <div>
                         <h3 className="font-semibold">Email</h3>
@@ -699,7 +716,7 @@ export function LandingPage() {
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 glass-button rounded-lg flex items-center justify-center">
-                        <MapPin className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        <MapPin className="size-10 stroke-primary" />
                       </div>
                       <div>
                         <h3 className="font-semibold">Office</h3>
@@ -717,7 +734,7 @@ export function LandingPage() {
                   <CardContent className="p-6">
                     <div className="flex items-center space-x-4">
                       <div className="w-12 h-12 glass-button rounded-lg flex items-center justify-center">
-                        <Calendar className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                        <Calendar className="size-10 stroke-primary" />
                       </div>
                       <div>
                         <h3 className="font-semibold">Business Hours</h3>
@@ -745,10 +762,10 @@ export function LandingPage() {
           >
             <FlickeringGrid
               className="absolute inset-0 z-0 [mask-image:radial-gradient(150px_circle_at_center,white,transparent)] md:[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]"
-              squareSize={4}
+              squareSize={5}
               gridGap={6}
               color="#60A5FA"
-              maxOpacity={0.5}
+              maxOpacity={0.8}
               flickerChance={0.1}
             // height={800}
             // width={800}
@@ -756,7 +773,7 @@ export function LandingPage() {
             <div className="absolute h-20 w-full top-0 bg-gradient-to-b from-background to-transparent" />
             <div className="absolute h-20 w-full bottom-0 bg-gradient-to-t from-background to-transparent" />
 
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-bold bg-gradient-to-r from-blue-600/30 via-purple-600/30 to-pink-600/30 bg-clip-text text-transparent drop-shadow-[0_5px_40px_rgba(147,51,234,0.5)]">
+            <h2 className="text-6xl md:text-8xl z-50 lg:text-9xl font-bold bg-gradient-to-br from-primary  to-primary/75 bg-clip-text text-transparent ">
               Bella AI
             </h2>
 
@@ -766,15 +783,21 @@ export function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div className="space-y-4">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
-                    {/* <Bot className="w-5 h-5 text-white" /> */}
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center">
+                    <Image
+                      width={50}
+                      height={100}
+                      className="size-full"
+                      alt={'bella'}
+                      src={'/bella.avif'}
+                    />
                   </div>
-                  <span className="text-xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <span className="text-xl font-bold">
                     Bella AI
                   </span>
                 </div>
                 <p className="text-muted-foreground">
-                  Your trusted AI companion for navigating life in a new place. Built with ❤️ for global citizens.
+                  Your trusted AI companion for house services in a new place. Built with ❤️ for global citizens.
                 </p>
                 <div className="flex space-x-4">
                   <Button variant="ghost" size="icon">
@@ -869,7 +892,7 @@ export function LandingPage() {
             </div>
 
             <div className="border-t border-border/50 mt-64 pt-8 text-center text-muted-foreground">
-              <p>&copy; 2024 Bella AI. All rights reserved. Empowering global citizens everywhere. 🌍</p>
+              <p>&copy; 2024 Bella AI. All rights reserved</p>
             </div>
           </div>
         </footer>
