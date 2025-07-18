@@ -702,7 +702,7 @@ export function LandingPage() {
         {/* Footer */}
         <footer ref={footerRef} className="py-16 px-4 border-t border-border/50  relative overflow-hidden">
 
-          {/* Large Doris AI Text */}
+          {/* Large Bella AI Text */}
           <motion.div
             className="absolute inset-x-0 bottom-48 md:bottom-32 h-48 flex items-center justify-center pointer-events-none"
             style={{ opacity: footerTextOpacity, scale: footerTextScale }}
@@ -833,7 +833,7 @@ export function LandingPage() {
             </div>
 
             <div className="border-t border-border/50 mt-64 pt-8 text-center text-muted-foreground">
-              <p>&copy; 2024 Doris AI. All rights reserved. Empowering global citizens everywhere. 🌍</p>
+              <p>&copy; 2024 Bella AI. All rights reserved. Empowering global citizens everywhere. 🌍</p>
             </div>
           </div>
         </footer>

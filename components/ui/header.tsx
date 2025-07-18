@@ -95,7 +95,7 @@ export function SiteHeader() {
     >
       <motion.div
         className={cn(
-          "mx-auto px-6 py-4 transition-all md:py-5 duration-500 ease-in-out",
+          "mx-auto px-6 !py-2 transition-all md:py-5 duration-500 ease-in-out",
           isScrolled
             ? "max-w-7xl md:mt-2 bg-background/95 backdrop-blur-lg shadow-lg border border-border/50 rounded-2xl"
             : "max-w-full",
@@ -107,24 +107,25 @@ export function SiteHeader() {
           {/* Logo */}
           <Link href="/" className="flex items-center group gap-2">
             <motion.div
-              className="w-12 h-12 bg-background p-1 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] rounded-xl flex items-center justify-center"
+              className="size-14 bg-transparent p-1 rounded-xl flex items-center justify-center"
               whileHover={{ scale: 1.05, rotate: 5 }}
               whileTap={{ scale: 0.95 }}
             >
               <Image
                 width={50}
                 height={100}
-                alt={'doris'}
-                src={'/doris-1.webp'}
+                className="size-full"
+                alt={'bella'}
+                src={'/bella.avif'}
               />
             </motion.div>
-            <span className="text-xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
               Bella AI
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex ml-24 items-center space-x-1">
+          <div className="hidden md:flex  items-center space-x-1">
             {navigationItems.map((item) => (
               <Link
                 key={item.name}
@@ -139,7 +140,7 @@ export function SiteHeader() {
           {/* Right Side Actions */}
           <div className="flex items-center justify-end">
             {/* Language Selector */}
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="hidden bg-background px-3 hover:bg-muted [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] !outline-none md:flex items-center space-x-1">
                   <Globe className="w-5 h-5 stroke-foreground" />
@@ -165,7 +166,7 @@ export function SiteHeader() {
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
 
             {/* Theme Toggle */}
             <Button
@@ -228,7 +229,7 @@ export function SiteHeader() {
               <Link
                 // onClick={toggleAuth}
                 href="/login"
-                className="bg-gradient-to-r flex items-center gap-2 rounded-lg px-3 py-2 from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white text-sm"
+                className="bg-gradient-to-r flex items-center gap-2 rounded-lg px-3 py-2 from-orange-600 to-pink-600 text-white text-sm"
               >
                 <LogIn className="w-4 h-4 mr-1" />
                 Sign In
@@ -250,7 +251,7 @@ export function SiteHeader() {
                       <Bot className="w-4 h-4 text-white" />
                     </div>
                     <span className="font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                      Doris AI
+                      Bella AI
                     </span>
                   </SheetTitle>
                 </SheetHeader>
@@ -269,7 +270,7 @@ export function SiteHeader() {
                   ))}
 
                   <div className="pt-4 mt-4 border-t border-border">
-                    <div className="flex items-center justify-between px-4 py-2">
+                    {/* <div className="flex items-center justify-between px-4 py-2">
                       <span className="text-sm text-muted-foreground">Language</span>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -299,7 +300,7 @@ export function SiteHeader() {
                           ))}
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    </div>
+                    </div> */}
 
                     <div className="flex items-center justify-between px-4 py-2">
                       <span className="text-sm text-muted-foreground">Theme</span>
