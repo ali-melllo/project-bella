@@ -34,7 +34,6 @@ export default function RootLayout({
               <SiteHeader />
               {children}
             </div>
-            {/* <FloatingAssistant /> */}
             <Toaster />
           </LanguageProvider>
         </ThemeProvider>

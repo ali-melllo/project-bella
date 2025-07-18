@@ -55,6 +55,7 @@ import Link from "next/link"
 import { SiteHeader } from "./ui/header"
 import { FlickeringGrid } from "./magicui/flickering-grid"
 import AnimatedBackground from "./magicui/animated-background"
+import { AnimatedShinyText } from "./magicui/animated-shiny-text"
 
 const features = [
   {
@@ -208,10 +209,10 @@ export function LandingPage() {
     target: footerRef,
     offset: ["start end", "end end"],
   })
-  
+
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"])
 
-  
+
 
   const footerTextOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 1])
   const footerTextScale = useTransform(scrollYProgress, [0, 0.5], [0.8, 1])
@@ -225,25 +226,31 @@ export function LandingPage() {
   }, [])
 
 
- 
+
 
   return (
 
     <>
-  
-  
+
+
 
       <div className="min-h-screen max-w-7xl mx-auto  relative overflow-hidden">
-      <AnimatedBackground />
+        <AnimatedBackground />
         {/* Hero Section */}
         <section className="pt-32 pb-20 relative">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-4xl mx-auto">
               <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-                <AnimatedGradientText className="mb-6">🏠 Welcome to the Future of Housing</AnimatedGradientText>
+
+                <Badge
+                  variant="secondary"
+                  className="md:px-8 flex justify-center w-9/12 md:w-4/12 mx-auto items-center py-2  rounded-3xl text-xs md:text-base font-medium bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
+                >
+                  <AnimatedShinyText>AI-Powered Living Platform</AnimatedShinyText>
+                </Badge>
 
                 <BlurIn>
-                  <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance">
+                  <h1 className="text-5xl md:text-7xl font-bold my-6 text-balance">
                     Find Your Perfect <WordRotate words={["Home", "Space", "Place", "Haven"]} className="text-gradient" />
                   </h1>
                 </BlurIn>
@@ -260,7 +267,7 @@ export function LandingPage() {
                     <Link href="/explore">
                       <Button
                         size="lg"
-                        className="glass-button bg-gradient-primary text-white border-0 text-lg px-8 py-4"
+                        className="bg-primary text-white border-0 text-lg px-8 py-4"
                       >
                         Explore Properties
                         <ArrowRight className="ml-2" size={20} />
