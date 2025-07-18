@@ -3,11 +3,6 @@
 @tailwind utilities;
 
 
-body {
-  font-family: "Poppins" !important;
-}
-
-
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -67,12 +62,6 @@ body {
 
 
   @layer base {
-    @font-face {
-      font-family: 'Poppins';
-      font-style: bold;
-      font-weight: 600;
-      src: url('/poppins.ttf');
-    }
     * {
       @apply border-border;
     }

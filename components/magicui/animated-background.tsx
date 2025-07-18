@@ -23,7 +23,7 @@ export default function AnimatedBackground() {
 {[...Array(20)].map((_, i) => (
   <motion.div
     key={i}
-    className="absolute z-10 size-5 md:size-10 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full "
+    className="absolute z-10 size-5 md:size-10 bg-gradient-to-r from-primary to-primary/40 rounded-full "
     style={{
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,

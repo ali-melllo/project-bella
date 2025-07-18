@@ -88,6 +88,15 @@ const config: Config = {
             backgroundPosition: "var(--bg-size) 0",
           },
         },
+		marquee: {
+			from: { transform: "translateX(0)" },
+			to: { transform: "translateX(calc(-100% - var(--gap)))" },
+		  },
+		  "marquee-vertical": {
+			from: { transform: "translateY(0)" },
+			to: { transform: "translateY(calc(-100% - var(--gap)))" },
+		  },
+  
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -96,6 +105,8 @@ const config: Config = {
         "pulse-slow": "pulse-slow 4s ease-in-out infinite",
         "shiny-text": "shiny-text 2s infinite",
         gradient: "gradient 8s linear infinite",
+		marquee: "marquee var(--duration) linear infinite",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
