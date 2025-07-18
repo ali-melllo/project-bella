@@ -580,8 +580,8 @@ export function LandingPage() {
                 <Badge variant="secondary" className="glass-card mb-4">
                   FAQ
                 </Badge>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">Frequently Asked Questions</h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-700 dark:text-foreground">Frequently Asked Questions</h2>
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                   Get answers to common questions about our platform and services.
                 </p>
               </motion.div>
