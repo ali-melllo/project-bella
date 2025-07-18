@@ -518,8 +518,8 @@ export function LandingPage() {
                 <Badge variant="secondary" className="glass-card mb-4">
                   Pricing
                 </Badge>
-                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gradient">Choose Your Plan</h2>
-                <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-700 dark:text-foreground">Choose Your Plan</h2>
+                <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                   Flexible pricing options to suit your needs, from casual browsing to professional use.
                 </p>
               </motion.div>
