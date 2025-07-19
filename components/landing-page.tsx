@@ -62,6 +62,7 @@ import { AnimatedShinyText } from "./magicui/animated-shiny-text"
 import { HeroAnimatedBeam } from "./magicui/hero-animated-beams"
 import Image from "next/image"
 import { ReviewsPage } from "./reviews"
+import { FixedAIAssistant } from "./fixed-ai-assistant"
 
 const features = [
   {
@@ -238,9 +239,13 @@ export function LandingPage() {
 
     <>
 
+      <div className="fixed z-50 bottom-7 right-7 ">
+        <FixedAIAssistant />
+      </div>
+
       <section className="relative min-h-screen w-full flex z-20 items-center overflow-x-hidden md:pt-16 mb-20 px-3 md:px-20">
 
-        <div className="w-full absolute flex justify-center top-24 z-20">
+        <div className="w-full absolute flex justify-center right-0 top-24 z-20">
           <Badge
             variant="secondary"
             className="md:px-8 flex justify-center w-auto mx-auto items-center py-2  rounded-3xl text-xs md:text-base font-medium bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]"
@@ -252,12 +257,13 @@ export function LandingPage() {
 
 
 
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 flex w-[100vw] size-full">
           <Image
             src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1920&h=1080&fit=crop&crop=focalpoint&auto=format&q=80"
             alt="Bella"
-            fill
-            className="object-cover"
+            width={2000}
+            height={2000}
+            className="object-cover size-full"
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent"></div>
@@ -281,7 +287,7 @@ export function LandingPage() {
             </BlurIn>
 
             <FadeIn delay={0.2}>
-              <p className="text-sm md:text-base text-gray-600 dark:text-gray-300 mb-8 text-balance">
+              <p className="text-sm md:text-base text-gray-300 mb-8 text-balance">
                 Discover verified properties, connect with trusted landlords, and find your ideal living space with
                 our AI-powered platform.
               </p>
@@ -309,8 +315,8 @@ export function LandingPage() {
                     size="lg"
                     className="bg-primary rounded-xl h-14 w-full  text-white border-0 text-xs md:text-lg px-8 py-4"
                   >
-                      Chat With Bella Ai
-                     <MessageCircleIcon className="ml-2" size={20} />
+                    Chat With Bella Ai
+                    <MessageCircleIcon className="ml-2" size={20} />
                   </Button>
                 </Link>
                 <Link href="/auth/signup">
@@ -346,7 +352,7 @@ export function LandingPage() {
 
         <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-background via-background/50 to-transparent"></div>
 
-        <div className="absolute inset-y-0 right-0 h-full w-96 bg-gradient-to-l from-background via-background/50 to-transparent"></div>
+        <div className="absolute inset-y-0 right-0 h-full w-[30em] bg-gradient-to-l from-background via-background/50 to-transparent"></div>
       </section>
 
       <div className="min-h-screen max-w-7xl mx-auto  relative overflow-hidden">
@@ -773,9 +779,15 @@ export function LandingPage() {
             <div className="absolute h-20 w-full top-0 bg-gradient-to-b from-background to-transparent" />
             <div className="absolute h-20 w-full bottom-0 bg-gradient-to-t from-background to-transparent" />
 
-            {/* <h2 className="text-6xl md:text-8xl z-50 lg:text-9xl font-bold bg-gradient-to-br from-primary  to-primary/75 bg-clip-text text-transparent ">
+            <h2
+              className="text-6xl md:text-8xl z-50 lg:text-9xl font-bold bg-gradient-to-br from-primary to-primary/75 bg-clip-text text-transparent"
+              style={{
+                textShadow: "4px 4px 10px rgba(0,0,0,0.3)",
+              }}
+            >
               Bella AI
-            </h2> */}
+            </h2>
+
 
 
           </motion.div>

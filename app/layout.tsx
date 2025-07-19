@@ -30,7 +30,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
           <LanguageProvider>
-            <div>
+            <div className="w-full relative flex flex-col">
               <SiteHeader />
               {children}
             </div>
