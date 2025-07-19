@@ -489,12 +489,11 @@ export default function MapPage() {
         </Button>
       </motion.div>
 
-      {/* Floating Action Button for Mobile */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.5 }}
-        className=" absolute flex flex-col top-24 md:top-28 right-4 z-[1000]"
+        className=" absolute flex flex-col top-24 md:top-28 right-4 z-[1000] "
       >
         <Button
           onClick={() => {
@@ -515,94 +514,14 @@ export default function MapPage() {
             );
           }}
           size="icon"
-          className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
+          className="w-12 h-12 rounded-full bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] shadow-lg hover:shadow-xl transition-all duration-200"
         >
-          <MapPin className="w-5 h-5 stroke-white" />
+          <MapPin className="size-8 stroke-foreground" />
         </Button>
 
         {/* AI Chat Fixed Button */}
 
-        <Sheet >
-          <SheetTrigger asChild>
-            <Button
-              className="size-12 mt-3 shadow-2xl rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 group"
-            >
-              <Sparkles className="w-6 h-6 stroke-white group-hover:scale-110 transition-transform" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="right" className="w-[90%] fixed sm:w-[400px] p-0 !z-[1000] flex flex-col">
-            {/* Chat Header */}
-            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-blue-500/10 to-purple-500/10">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Map AI Assistant</h3>
-                  <p className="text-sm text-muted-foreground">Ask me about location options</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Chat Messages */}
-            <ScrollArea className="flex-1 p-4" ref={chatScrollRef}>
-              <div className="space-y-4">
-                {chatMessages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div
-                      className={`max-w-[80%] rounded-lg p-3 ${message.sender === "user"
-                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                        : "bg-muted/50 backdrop-blur-sm"
-                        }`}
-                    >
-                      <p className="text-sm leading-relaxed">{message.content}</p>
-                      <p className="text-xs opacity-70 mt-1">
-                        {message.timestamp.toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-
-                {/* Typing Indicator */}
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="bg-muted/50 backdrop-blur-sm rounded-lg p-3">
-                      <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-100"></div>
-                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-200"></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </ScrollArea>
-
-            {/* Chat Input */}
-            <div className="p-4 border-t border-border/50">
-              <div className="flex items-center space-x-2">
-                <Input
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  placeholder="Ask about housing options..."
-                  className="flex-1 outline-none"
-                />
-                <Button
-                  disabled={!chatInput.trim()}
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                >
-                  <Send className="size-5 stroke-white" />
-                </Button>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+        
       </motion.div>
     </div>
   )

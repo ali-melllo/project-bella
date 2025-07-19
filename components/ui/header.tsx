@@ -48,10 +48,10 @@ const languages = [
 // Navigation items
 const navigationItems = [
   //   { name: "Home", href: "/", icon: Home },
-  { name: "Jobs", href: "/jobs", icon: Briefcase },
+  { name: "Services", href: "/services", icon: Briefcase },
   { name: "Housing", href: "/houses", icon: Building2 },
   { name: "Chat", href: "/chat", icon: Users },
-  { name: "Browse", href: "/map", icon: HelpCircle },
+  { name: "Browse", href: "/explore", icon: HelpCircle },
 ]
 
 export function SiteHeader() {
@@ -91,7 +91,7 @@ export function SiteHeader() {
 
   return (
     <motion.header
-      className="fixed top-0 z-[1000] left-0 right-0  backdrop-blur-xl bg-background transition-all duration-300 ease-in-out"
+      className="fixed top-0 z-[1000] left-0 right-0  backdrop-blur-xl bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] transition-all duration-300 ease-in-out"
     >
       <motion.div
         className={cn(
@@ -130,7 +130,7 @@ export function SiteHeader() {
               <Link
                 key={item.name}
                 href={item.href}
-                className="px-3 py-2 rounded-lg text-base text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className={`px-3 py-2 rounded-lg text-base text-muted-foreground hover:text-foreground  ${path === item.href ? "bg-muted hover:bg-muted" : "hover:bg-muted/50"} transition-colors`}
               >
                 {item.name}
               </Link>
