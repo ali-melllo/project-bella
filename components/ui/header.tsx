@@ -89,9 +89,9 @@ export function SiteHeader() {
 
   if (!mounted) return null
 
-  return path === '/login' ? null : (
+  return (
     <motion.header
-      className="fixed top-0 z-[1000] left-0 right-0  backdrop-blur-xl bg-transparent transition-all duration-300 ease-in-out"
+      className="fixed top-0 z-[1000] left-0 right-0  backdrop-blur-xl bg-background transition-all duration-300 ease-in-out"
     >
       <motion.div
         className={cn(
@@ -228,7 +228,7 @@ export function SiteHeader() {
             ) : (
               <Link
                 // onClick={toggleAuth}
-                href="/login"
+                href="/auth/login"
                 className="bg-gradient-to-r flex items-center gap-2 rounded-lg px-3 py-2 from-orange-600 to-pink-600 text-white text-sm"
               >
                 <LogIn className="w-4 h-4 mr-1" />

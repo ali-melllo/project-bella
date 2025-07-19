@@ -1,450 +1,609 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import dynamic from "next/dynamic"
+import { MapPin, Star, Navigation, Phone, Clock, ChevronLeft, Menu, ChevronRight, Sparkles, Bot, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Search,
-  Heart,
-  Star,
-  MapPin,
-  Bed,
-  Bath,
-  Car,
-  Wifi,
-  Dumbbell,
-  Coffee,
-  Shield,
-  ChevronLeft,
-  ChevronRight,
-  Grid3X3,
-  List,
-  SlidersHorizontal,
-} from "lucide-react"
-import { useLanguage } from "@/components/language-provider"
-import { DesktopNav } from "@/components/desktop-nav"
-import { TenantNav } from "@/components/tenant-nav"
-import { GlowingCard } from "@/components/ui/glowing-card"
-import { FloatingTooltip } from "@/components/ui/floating-tooltip"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import type { Map as LeafletMap } from "leaflet"
+import "leaflet/dist/leaflet.css"
+import { Input } from "@/components/ui/input"
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
-export default function ExplorePage() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [priceRange, setPriceRange] = useState([800, 3000])
-  const [bedrooms, setBedrooms] = useState("")
-  const [propertyType, setPropertyType] = useState("")
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
-  const [showFilters, setShowFilters] = useState(false)
-  const [favorites, setFavorites] = useState<number[]>([])
-  const { t } = useLanguage()
+// Dynamically import map components to avoid SSR issues
+const MapContainer = dynamic(() => import("react-leaflet").then((mod) => mod.MapContainer), { ssr: false })
+const TileLayer = dynamic(() => import("react-leaflet").then((mod) => mod.TileLayer), { ssr: false })
+const Marker = dynamic(() => import("react-leaflet").then((mod) => mod.Marker), { ssr: false })
+const Popup = dynamic(() => import("react-leaflet").then((mod) => mod.Popup), { ssr: false })
 
-  const properties = [
-    {
-      id: 1,
-      title: "Modern Downtown Loft",
-      address: "123 Main St, Downtown",
-      price: 2400,
-      bedrooms: 2,
-      bathrooms: 2,
-      sqft: 1200,
-      images: ["/placeholder.svg?height=300&width=400", "/placeholder.svg?height=300&width=400"],
-      amenities: ["Wifi", "Gym", "Parking"],
-      rating: 4.8,
-      reviews: 24,
-      verified: true,
-      owner: {
-        name: "Sarah Johnson",
-        avatar: "/placeholder.svg?height=40&width=40",
-        rating: 4.9,
-        properties: 12,
-      },
-      features: ["Pet Friendly", "Furnished", "Balcony"],
-    },
-    {
-      id: 2,
-      title: "Cozy Studio Apartment",
-      address: "456 Oak Ave, Midtown",
-      price: 1800,
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 650,
-      images: ["/placeholder.svg?height=300&width=400", "/placeholder.svg?height=300&width=400"],
-      amenities: ["Wifi", "Laundry", "Coffee"],
-      rating: 4.6,
-      reviews: 18,
-      verified: true,
-      owner: {
-        name: "Mike Chen",
-        avatar: "/placeholder.svg?height=40&width=40",
-        rating: 4.7,
-        properties: 8,
-      },
-      features: ["Recently Renovated", "City View"],
-    },
-    {
-      id: 3,
-      title: "Luxury Penthouse Suite",
-      address: "789 Hill St, Uptown",
-      price: 4200,
-      bedrooms: 3,
-      bathrooms: 3,
-      sqft: 2100,
-      images: ["/placeholder.svg?height=300&width=400", "/placeholder.svg?height=300&width=400"],
-      amenities: ["Wifi", "Gym", "Pool", "Concierge"],
-      rating: 4.9,
-      reviews: 31,
-      verified: true,
-      owner: {
-        name: "Emma Rodriguez",
-        avatar: "/placeholder.svg?height=40&width=40",
-        rating: 5.0,
-        properties: 5,
-      },
-      features: ["Rooftop Access", "Smart Home", "Premium Finishes"],
-    },
-    {
-      id: 4,
-      title: "Student Housing Complex",
-      address: "321 University Blvd, Campus",
-      price: 1200,
-      bedrooms: 1,
-      bathrooms: 1,
-      sqft: 500,
-      images: ["/placeholder.svg?height=300&width=400", "/placeholder.svg?height=300&width=400"],
-      amenities: ["Wifi", "Study Room", "Gym"],
-      rating: 4.4,
-      reviews: 42,
-      verified: true,
-      owner: {
-        name: "Campus Living LLC",
-        avatar: "/placeholder.svg?height=40&width=40",
-        rating: 4.5,
-        properties: 25,
-      },
-      features: ["Student Friendly", "All Utilities Included", "Study Spaces"],
-    },
-  ]
+// Mock location data
+const locations = [
+  {
+    id: 1,
+    title: "Amsterdam Immigration Center",
+    address: "Stadhouderskade 85, 1073 AX Amsterdam",
+    category: "Government",
+    distance: "1.2 km",
+    rating: 4.2,
+    phone: "+31 20 624 1111",
+    hours: "Mon-Fri 9:00-17:00",
+    coordinates: [52.3602, 4.8891] as [number, number],
+    description: "Official immigration services and documentation",
+  },
+  {
+    id: 2,
+    title: "Job Support Hub",
+    address: "Nieuwezijds Voorburgwal 67, 1012 RE Amsterdam",
+    category: "Employment",
+    distance: "0.8 km",
+    rating: 4.5,
+    phone: "+31 20 555 0123",
+    hours: "Mon-Fri 8:30-18:00",
+    coordinates: [52.3738, 4.8909] as [number, number],
+    description: "Career guidance and job placement services",
+  },
+  {
+    id: 3,
+    title: "Affordable Housing Desk",
+    address: "Haarlemmerweg 10, 1014 BE Amsterdam",
+    category: "Housing",
+    distance: "2.1 km",
+    rating: 3.8,
+    phone: "+31 20 555 0456",
+    hours: "Tue-Thu 10:00-16:00",
+    coordinates: [52.389, 4.8729] as [number, number],
+    description: "Social housing applications and support",
+  },
+  {
+    id: 4,
+    title: "Social Services Point",
+    address: "Oostelijke Handelskade 12, 1019 BN Amsterdam",
+    category: "Support",
+    distance: "3.5 km",
+    rating: 4.1,
+    phone: "+31 20 555 0789",
+    hours: "Mon-Wed 9:00-15:00",
+    coordinates: [52.3731, 4.9214] as [number, number],
+    description: "General social support and benefits information",
+  },
+  {
+    id: 5,
+    title: "Medical Assistance Office",
+    address: "Weteringschans 32, 1017 SG Amsterdam",
+    category: "Healthcare",
+    distance: "1.8 km",
+    rating: 4.7,
+    phone: "+31 20 555 0321",
+    hours: "Mon-Fri 8:00-17:00",
+    coordinates: [52.3615, 4.8847] as [number, number],
+    description: "Healthcare registration and medical support",
+  },
+  {
+    id: 6,
+    title: "Language Learning Center",
+    address: "Rokin 75 Rokin st, 1012 KL Amsterdam",
+    category: "Education",
+    distance: "0.5 km",
+    rating: 4.6,
+    phone: "+31 20 555 0654",
+    hours: "Mon-Sat 9:00-21:00",
+    coordinates: [52.3702, 4.8952] as [number, number],
+    description: "Dutch language courses and integration programs for migrants and new travelers",
+  },
+]
 
-  const amenityIcons = {
-    Wifi: Wifi,
-    Gym: Dumbbell,
-    Coffee: Coffee,
-    Parking: Car,
-    Pool: "🏊",
-    Laundry: "🧺",
-    Concierge: Shield,
-    "Study Room": "📚",
+// Category colors and icons
+const categoryConfig = {
+  Government: { color: "from-blue-500 to-blue-600", icon: "🏛️" },
+  Employment: { color: "from-purple-500 to-purple-600", icon: "💼" },
+  Housing: { color: "from-teal-500 to-teal-600", icon: "🏠" },
+  Support: { color: "from-green-500 to-green-600", icon: "🤝" },
+  Healthcare: { color: "from-red-500 to-red-600", icon: "🏥" },
+  Education: { color: "from-orange-500 to-orange-600", icon: "📚" },
+}
+
+export default function MapPage() {
+  const [selectedLocation, setSelectedLocation] = useState<number | null>(null)
+  const [mapLoaded, setMapLoaded] = useState(false)
+  const [leafletLoaded, setLeafletLoaded] = useState(false)
+  const [isAiChatOpen, setIsAiChatOpen] = useState(false)
+  const [chatMessages, setChatMessages] = useState<any[]>([
+    {
+      id: "1",
+      content:
+        "Hello! I'm your AI Map assistant. I can help you find the perfect home or jobs or events based on your preferences, budget, and lifestyle. What kind of location are you looking for?",
+      sender: "ai",
+      timestamp: new Date(Date.now() - 300000),
+    },
+  ]);
+
+  const [chatInput, setChatInput] = useState("")
+  const [isTyping, setIsTyping] = useState(false)
+
+  const mapRef = useRef<LeafletMap | null>(null)
+  const carouselRef = useRef<HTMLDivElement>(null)
+  const chatScrollRef = useRef<HTMLDivElement>(null)
+
+  // Amsterdam center coordinates
+  const amsterdamCenter: [number, number] = [52.3676, 4.9041]
+
+  useEffect(() => {
+    // Import Leaflet CSS and fix marker icons
+    const loadLeaflet = async () => {
+
+      const L = await import("leaflet")
+
+      // Fix marker icon issue
+      delete (L.Icon.Default.prototype as any)._getIconUrl
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png",
+        iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png",
+        shadowUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png",
+      })
+
+      setLeafletLoaded(true)
+      setMapLoaded(true)
+    }
+
+    loadLeaflet()
+  }, [])
+
+  const handleLocationClick = (locationId: number) => {
+    setSelectedLocation(locationId)
+    const location = locations.find((loc) => loc.id === locationId)
+    if (location && mapRef.current) {
+      mapRef.current.setView(location.coordinates, 15, { animate: true })
+    }
+
+    // Scroll to selected card in mobile carousel
+    if (carouselRef.current) {
+      const selectedIndex = locations.findIndex((loc) => loc.id === locationId)
+      const cardWidth = 280 // Approximate card width + gap
+      carouselRef.current.scrollTo({
+        left: selectedIndex * cardWidth,
+        behavior: "smooth",
+      })
+    }
   }
 
-  const toggleFavorite = (propertyId: number) => {
-    setFavorites((prev) => (prev.includes(propertyId) ? prev.filter((id) => id !== propertyId) : [...prev, propertyId]))
+  const renderStars = (rating: number) => {
+    const fullStars = Math.floor(rating)
+    const hasHalfStar = rating % 1 !== 0
+    const stars = []
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)
+    }
+
+    if (hasHalfStar) {
+      stars.push(<Star key="half" className="w-3 h-3 fill-yellow-400/50 text-yellow-400" />)
+    }
+
+    const emptyStars = 5 - Math.ceil(rating)
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<Star key={`empty-${i}`} className="w-3 h-3 text-gray-300" />)
+    }
+
+    return stars
   }
 
-  const PropertyCard = ({ property }: { property: (typeof properties)[0] }) => (
-    <GlowingCard className="glass-card overflow-hidden group card-hover">
-      <div className="relative">
-        <img src={property.images[0] || "/placeholder.svg"} alt={property.title} className="w-full h-48 object-cover" />
-        <div className="absolute top-3 right-3 flex gap-2">
-          <FloatingTooltip content={favorites.includes(property.id) ? "Remove from favorites" : "Add to favorites"}>
-            <Button
-              size="icon"
-              variant="ghost"
-              className={`glass-button w-8 h-8 ${favorites.includes(property.id) ? "text-red-500" : "text-white"}`}
-              onClick={() => toggleFavorite(property.id)}
-            >
-              <Heart className={`w-4 h-4 ${favorites.includes(property.id) ? "fill-current" : ""}`} />
-            </Button>
-          </FloatingTooltip>
-          {property.verified && (
-            <Badge className="bg-green-500 text-white">
-              <Shield className="w-3 h-3 mr-1" />
-              {t("Verified")}
-            </Badge>
-          )}
-        </div>
-        <div className="absolute bottom-3 left-3">
-          <Badge className="glass-card text-white font-bold">${property.price.toLocaleString()}/mo</Badge>
-        </div>
-      </div>
-
-      <CardContent className="p-4 space-y-3">
-        <div>
-          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">{property.title}</h3>
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <MapPin className="w-3 h-3" />
-            {property.address}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-1">
-            <Bed className="w-4 h-4" />
-            {property.bedrooms} {t("bed")}
-          </div>
-          <div className="flex items-center gap-1">
-            <Bath className="w-4 h-4" />
-            {property.bathrooms} {t("bath")}
-          </div>
-          <div className="text-muted-foreground">{property.sqft} sqft</div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1">
-            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-            <span className="font-medium">{property.rating}</span>
-            <span className="text-sm text-muted-foreground">({property.reviews})</span>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-1">
-          {property.amenities.slice(0, 3).map((amenity) => {
-            const Icon = amenityIcons[amenity as keyof typeof amenityIcons]
-            return (
-              <Badge key={amenity} variant="outline" className="glass-button bg-transparent text-xs">
-                {typeof Icon === "string" ? Icon : <Icon className="w-3 h-3 mr-1" />}
-                {amenity}
-              </Badge>
-            )
-          })}
-          {property.amenities.length > 3 && (
-            <Badge variant="outline" className="glass-button bg-transparent text-xs">
-              +{property.amenities.length - 3}
-            </Badge>
-          )}
-        </div>
-
-        <div className="flex items-center justify-between pt-2">
-          <div className="flex items-center gap-2">
-            <Avatar className="w-6 h-6">
-              <AvatarImage src={property.owner.avatar || "/placeholder.svg"} />
-              <AvatarFallback>{property.owner.name[0]}</AvatarFallback>
-            </Avatar>
-            <div className="text-sm">
-              <p className="font-medium">{property.owner.name}</p>
-              <div className="flex items-center gap-1 text-muted-foreground">
-                <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                {property.owner.rating}
+  // Desktop Location Card
+  const DesktopLocationCard = ({ location, isSelected }: { location: (typeof locations)[0]; isSelected: boolean }) => (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ scale: 1.02, y: -2 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card
+        className={`cursor-pointer transition-all duration-300 backdrop-blur-xl bg-card/90 border-border/50 hover:shadow-xl hover:shadow-blue-500/10 ${isSelected ? "ring-2 ring-blue-500 shadow-xl shadow-blue-500/20 bg-card" : ""
+          }`}
+        onClick={() => handleLocationClick(location.id)}
+      >
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x-3">
+              <Avatar className="w-12 h-12 shadow-lg">
+                <AvatarFallback
+                  className={`bg-gradient-to-br ${categoryConfig[location.category as keyof typeof categoryConfig]?.color
+                    } text-white text-lg shadow-inner`}
+                >
+                  {categoryConfig[location.category as keyof typeof categoryConfig]?.icon}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <CardTitle className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text">
+                  {location.title}
+                </CardTitle>
+                <Badge
+                  variant="secondary"
+                  className={`mt-1 bg-gradient-to-r ${categoryConfig[location.category as keyof typeof categoryConfig]?.color
+                    } text-white border-0 shadow-sm`}
+                >
+                  {location.category}
+                </Badge>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="flex items-center space-x-1 mb-1">
+                {renderStars(location.rating)}
+                <span className="text-sm text-muted-foreground ml-1 font-medium">{location.rating}</span>
+              </div>
+              <div className="flex items-center text-sm text-muted-foreground">
+                <Navigation className="w-3 h-3 mr-1" />
+                {location.distance}
               </div>
             </div>
           </div>
-          <Button size="sm" className="glass-button">
-            {t("View Details")}
-          </Button>
-        </div>
-      </CardContent>
-    </GlowingCard>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <div className="space-y-3">
+            <div className="flex items-start space-x-2">
+              <MapPin className="w-4 h-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+              <span className="text-sm text-muted-foreground leading-relaxed">{location.address}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Phone className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">{location.phone}</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">{location.hours}</span>
+            </div>
+            <p className="text-sm text-muted-foreground mt-3 leading-relaxed">{location.description}</p>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
   )
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900">
-      {/* Floating background elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-300/10 rounded-full blur-3xl animate-float" />
-        <div
-          className="absolute top-3/4 right-1/4 w-96 h-96 bg-pink-300/10 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: "2s" }}
-        />
-      </div>
-
-      <div className="flex">
-        {/* Desktop Navigation */}
-        <div className="hidden lg:block">
-          <DesktopNav />
-        </div>
-
-        {/* Main Content */}
-        <div className="flex-1 lg:ml-64">
-          {/* Header */}
-          <header className="glass-header sticky top-0 z-40 border-b border-white/10">
-            <div className="flex items-center justify-between h-16 px-4 lg:px-8">
-              <div className="flex items-center gap-4">
-                <h1 className="text-2xl font-bold text-gradient">{t("Explore Properties")}</h1>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => setViewMode(viewMode === "grid" ? "list" : "grid")}
-                  className="glass-button bg-transparent"
-                >
-                  {viewMode === "grid" ? <List className="w-4 h-4" /> : <Grid3X3 className="w-4 h-4" />}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="glass-button bg-transparent lg:hidden"
-                >
-                  <SlidersHorizontal className="w-4 h-4 mr-2" />
-                  {t("Filters")}
-                </Button>
-              </div>
-            </div>
-          </header>
-
-          <div className="flex">
-            {/* Filters Sidebar */}
-            <div
-              className={`${showFilters ? "block" : "hidden"} lg:block w-full lg:w-80 glass-surface border-r border-white/10 p-6 space-y-6 lg:sticky lg:top-16 lg:h-[calc(100vh-4rem)] overflow-y-auto custom-scrollbar`}
-            >
-              <div className="space-y-4">
-                <h3 className="font-semibold text-lg">{t("Search & Filter")}</h3>
-
-                {/* Search */}
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder={t("Search by location, property name...")}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10 glass-inset focus-ring"
-                  />
-                </div>
-
-                {/* Price Range */}
-                <div className="space-y-3">
-                  <label className="text-sm font-medium">{t("Price Range")}</label>
-                  <div className="px-2">
-                    <Slider
-                      value={priceRange}
-                      onValueChange={setPriceRange}
-                      max={5000}
-                      min={500}
-                      step={100}
-                      className="w-full"
-                    />
-                  </div>
-                  <div className="flex justify-between text-sm text-muted-foreground">
-                    <span>${priceRange[0].toLocaleString()}</span>
-                    <span>${priceRange[1].toLocaleString()}</span>
-                  </div>
-                </div>
-
-                {/* Bedrooms */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">{t("Bedrooms")}</label>
-                  <Select value={bedrooms} onValueChange={setBedrooms}>
-                    <SelectTrigger className="glass-inset focus-ring">
-                      <SelectValue placeholder={t("Any")} />
-                    </SelectTrigger>
-                    <SelectContent className="glass-card">
-                      <SelectItem value="any">{t("Any")}</SelectItem>
-                      <SelectItem value="studio">{t("Studio")}</SelectItem>
-                      <SelectItem value="1">1 {t("Bedroom")}</SelectItem>
-                      <SelectItem value="2">2 {t("Bedrooms")}</SelectItem>
-                      <SelectItem value="3">3+ {t("Bedrooms")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Property Type */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">{t("Property Type")}</label>
-                  <Select value={propertyType} onValueChange={setPropertyType}>
-                    <SelectTrigger className="glass-inset focus-ring">
-                      <SelectValue placeholder={t("All Types")} />
-                    </SelectTrigger>
-                    <SelectContent className="glass-card">
-                      <SelectItem value="all">{t("All Types")}</SelectItem>
-                      <SelectItem value="apartment">{t("Apartment")}</SelectItem>
-                      <SelectItem value="house">{t("House")}</SelectItem>
-                      <SelectItem value="condo">{t("Condo")}</SelectItem>
-                      <SelectItem value="studio">{t("Studio")}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Amenities */}
-                <div className="space-y-3">
-                  <label className="text-sm font-medium">{t("Amenities")}</label>
-                  <div className="space-y-2">
-                    {["Wifi", "Gym", "Parking", "Pool", "Laundry", "Pet Friendly"].map((amenity) => (
-                      <div key={amenity} className="flex items-center space-x-2">
-                        <Checkbox id={amenity} className="glass-button" />
-                        <label htmlFor={amenity} className="text-sm">
-                          {t(amenity)}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Clear Filters */}
-                <Button variant="outline" className="w-full glass-button bg-transparent">
-                  {t("Clear All Filters")}
-                </Button>
-              </div>
-            </div>
-
-            {/* Properties Grid */}
-            <div className="flex-1 p-6 space-y-6 relative z-10">
-              {/* Results Header */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-xl font-semibold">
-                    {properties.length} {t("Properties Found")}
-                  </h2>
-                  <p className="text-muted-foreground">{t("Showing results for your search criteria")}</p>
-                </div>
-                <Select defaultValue="recommended">
-                  <SelectTrigger className="w-48 glass-inset focus-ring">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="glass-card">
-                    <SelectItem value="recommended">{t("Recommended")}</SelectItem>
-                    <SelectItem value="price-low">{t("Price: Low to High")}</SelectItem>
-                    <SelectItem value="price-high">{t("Price: High to Low")}</SelectItem>
-                    <SelectItem value="newest">{t("Newest First")}</SelectItem>
-                    <SelectItem value="rating">{t("Highest Rated")}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              {/* Properties */}
-              <div
-                className={`grid gap-6 ${
-                  viewMode === "grid" ? "grid-cols-1 md:grid-cols-2 xl:grid-cols-3" : "grid-cols-1"
-                }`}
+  // Mobile Carousel Card
+  const MobileCarouselCard = ({ location, isSelected }: { location: (typeof locations)[0]; isSelected: boolean }) => (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ duration: 0.2 }}
+      className="flex-shrink-0 w-64"
+    >
+      <Card
+        className={`cursor-pointer p-3 transition-all duration-300 backdrop-blur-xl bg-card/95 border-border/50 hover:shadow-lg hover:shadow-blue-500/10 h-full ${isSelected ? "ring-2 ring-blue-500 shadow-lg shadow-blue-500/20 bg-card" : ""
+          }`}
+        onClick={() => handleLocationClick(location.id)}
+      >
+        <CardHeader className="pb-2">
+          <div className="flex items-center space-x-3">
+            <Avatar className="w-10 h-10 shadow-md">
+              <AvatarFallback
+                className={`bg-gradient-to-br ${categoryConfig[location.category as keyof typeof categoryConfig]?.color
+                  } text-white text-base shadow-inner`}
               >
-                {properties.map((property) => (
-                  <PropertyCard key={property.id} property={property} />
-                ))}
-              </div>
-
-              {/* Pagination */}
-              <div className="flex items-center justify-center gap-2 pt-8">
-                <Button variant="outline" size="icon" className="glass-button bg-transparent">
-                  <ChevronLeft className="w-4 h-4" />
-                </Button>
-                <div className="flex gap-1">
-                  {[1, 2, 3, 4, 5].map((page) => (
-                    <Button
-                      key={page}
-                      variant={page === 1 ? "default" : "outline"}
-                      size="icon"
-                      className={page === 1 ? "glass-button" : "glass-button bg-transparent"}
-                    >
-                      {page}
-                    </Button>
-                  ))}
-                </div>
-                <Button variant="outline" size="icon" className="glass-button bg-transparent">
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
+                {categoryConfig[location.category as keyof typeof categoryConfig]?.icon}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <CardTitle className="text-base font-semibold truncate">{location.title}</CardTitle>
+              <Badge
+                variant="secondary"
+                className={`mt-1 bg-gradient-to-r ${categoryConfig[location.category as keyof typeof categoryConfig]?.color
+                  } text-white border-0 shadow-sm text-xs`}
+              >
+                {location.category}
+              </Badge>
             </div>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0 space-y-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-1">
+              {renderStars(location.rating)}
+              <span className="text-xs text-muted-foreground ml-1">{location.rating}</span>
+            </div>
+            <div className="flex items-center text-xs text-muted-foreground">
+              <Navigation className="w-3 h-3 mr-1" />
+              {location.distance}
+            </div>
+          </div>
+          <div className="flex items-start space-x-2">
+            <MapPin className="w-3 h-3 text-muted-foreground mt-0.5 flex-shrink-0" />
+            <span className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">{location.address}</span>
+          </div>
+          <p className="text-xs text-muted-foreground line-clamp-1 leading-relaxed">{location.description}</p>
+        </CardContent>
+      </Card>
+    </motion.div>
+  )
+
+  const DesktopLocationsList = () => (
+    <ScrollArea className="h-full rounded-none">
+      <div className="space-y-4 p-6">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Nearby Locations
+          </h2>
+          <p className="text-sm text-muted-foreground">{locations.length} locations found in Amsterdam</p>
+        </div>
+        <AnimatePresence>
+          {locations.map((location) => (
+            <DesktopLocationCard key={location.id} location={location} isSelected={selectedLocation === location.id} />
+          ))}
+        </AnimatePresence>
+      </div>
+    </ScrollArea>
+  )
+
+  if (!mapLoaded || !leafletLoaded) {
+    return (
+      <div className="h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/20">
+        <div className="text-center">
+          <div className="w-20 h-20 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-6 shadow-lg"></div>
+          <div className="space-y-2">
+            <p className="text-lg font-medium">Loading map...</p>
+            <p className="text-sm text-muted-foreground">Preparing your location experience</p>
           </div>
         </div>
       </div>
+    )
+  }
 
-      {/* Mobile Navigation */}
-      <div className="lg:hidden">
-        <TenantNav />
+  return (
+    <div className="h-[100dvh] relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/10">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl animate-pulse-slow delay-1000"></div>
+        <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-teal-500/5 rounded-full blur-3xl animate-pulse-slow delay-2000"></div>
       </div>
+
+      {/* Header */}
+      
+      {/* Desktop Sidebar */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2 }}
+        className="hidden md:block absolute left-0 md:-mt-2 top-20 bottom-0 w-96 z-[1000]"
+      >
+        <Card className="h-full rounded-none backdrop-blur-xl p-0 bg-card/95 border-border/50 shadow-2xl shadow-black/5">
+          <DesktopLocationsList />
+        </Card>
+      </motion.div>
+
+      {/* Map Container */}
+      <div className="h-full w-full">
+        {leafletLoaded && (
+          <MapContainer
+            center={amsterdamCenter}
+            zoom={13}
+            style={{ height: "100%", width: "100%" }}
+            ref={mapRef}
+            zoomControl={false}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
+            {locations.map((location) => (
+              <Marker
+                key={location.id}
+                position={location.coordinates}
+                eventHandlers={{
+                  click: () => handleLocationClick(location.id),
+                }}
+              >
+                <Popup>
+                  <div className="p-3 min-w-[220px]">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <span className="text-lg">
+                        {categoryConfig[location.category as keyof typeof categoryConfig]?.icon}
+                      </span>
+                      <h3 className="font-semibold text-sm">{location.title}</h3>
+                    </div>
+                    <p className="text-xs text-gray-600 mb-2">{location.address}</p>
+                    <div className="flex items-center space-x-1 mb-2">
+                      {renderStars(location.rating).slice(0, 5)}
+                      <span className="text-xs text-gray-600 ml-1">{location.rating}</span>
+                    </div>
+                    <Badge
+                      variant="secondary"
+                      className={`text-xs bg-gradient-to-r ${categoryConfig[location.category as keyof typeof categoryConfig]?.color
+                        } text-white border-0`}
+                    >
+                      {location.category}
+                    </Badge>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        )}
+      </div>
+
+      {/* Mobile Horizontal Carousel */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4 }}
+        className="md:hidden absolute bottom-0 left-0 right-0 z-[1000]"
+      >
+        <div className="bg-transparent shadow-2xl">
+          <div className="pb-6 pl-4">
+            <div className="flex items-center justify-between mb-4">
+              {/* <div>
+                <h3 className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Locations
+                </h3>
+                <p className="text-xs text-muted-foreground">{locations.length} places nearby</p>
+              </div> */}
+              <Button variant="ghost" size="sm" className="text-xs">
+                View All
+                <ChevronRight className="w-3 h-3 ml-1" />
+              </Button>
+            </div>
+
+            <div
+              ref={carouselRef}
+              className="flex space-x-3 last:pr-4 overflow-x-auto scrollbar-hide pb-2"
+              style={{
+                scrollSnapType: "x mandatory",
+                scrollBehavior: "smooth",
+              }}
+            >
+              {locations.map((location) => (
+                <div key={location.id} style={{ scrollSnapAlign: "start" }}>
+                  <MobileCarouselCard location={location} isSelected={selectedLocation === location.id} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Enhanced Zoom Controls */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.3 }}
+        className="absolute bottom-[34%] right-4 z-[1000] flex flex-col space-y-2 md:bottom-4"
+      >
+        <Button
+          variant="outline"
+          size="icon"
+          className="backdrop-blur-xl bg-primary hover:bg-background border-border/50 shadow-lg hover:shadow-xl transition-all duration-200"
+          onClick={() => mapRef.current?.zoomIn()}
+        >
+          <span className="text-lg font-bold">+</span>
+        </Button>
+        <Button
+          variant="outline"
+          size="icon"
+          className="backdrop-blur-xl bg-primary hover:bg-background border-border/50 shadow-lg hover:shadow-xl transition-all duration-200"
+          onClick={() => mapRef.current?.zoomOut()}
+        >
+          <span className="text-lg font-bold">−</span>
+        </Button>
+      </motion.div>
+
+      {/* Floating Action Button for Mobile */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.5 }}
+        className=" absolute flex flex-col top-24 md:top-28 right-4 z-[1000]"
+      >
+        <Button
+          onClick={() => {
+            if (!navigator.geolocation) {
+              return;
+            }
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                console.log("User location:", position.coords.latitude, position.coords.longitude);
+              },
+              (error) => {
+                if (error.code === error.PERMISSION_DENIED) {
+                  console.log("Please enable location permissions in your browser.");
+                } else {
+                  console.log("Error getting location: " + error.message);
+                }
+              }
+            );
+          }}
+          size="icon"
+          className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transition-all duration-200"
+        >
+          <MapPin className="w-5 h-5 stroke-white" />
+        </Button>
+
+        {/* AI Chat Fixed Button */}
+
+        <Sheet >
+          <SheetTrigger asChild>
+            <Button
+              className="size-12 mt-3 shadow-2xl rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 group"
+            >
+              <Sparkles className="w-6 h-6 stroke-white group-hover:scale-110 transition-transform" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[90%] fixed sm:w-[400px] p-0 !z-[1000] flex flex-col">
+            {/* Chat Header */}
+            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-blue-500/10 to-purple-500/10">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <Bot className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">Map AI Assistant</h3>
+                  <p className="text-sm text-muted-foreground">Ask me about location options</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Chat Messages */}
+            <ScrollArea className="flex-1 p-4" ref={chatScrollRef}>
+              <div className="space-y-4">
+                {chatMessages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-lg p-3 ${message.sender === "user"
+                        ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+                        : "bg-muted/50 backdrop-blur-sm"
+                        }`}
+                    >
+                      <p className="text-sm leading-relaxed">{message.content}</p>
+                      <p className="text-xs opacity-70 mt-1">
+                        {message.timestamp.toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+
+                {/* Typing Indicator */}
+                {isTyping && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted/50 backdrop-blur-sm rounded-lg p-3">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-100"></div>
+                        <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-200"></div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+
+            {/* Chat Input */}
+            <div className="p-4 border-t border-border/50">
+              <div className="flex items-center space-x-2">
+                <Input
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  placeholder="Ask about housing options..."
+                  className="flex-1 outline-none"
+                />
+                <Button
+                  disabled={!chatInput.trim()}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                >
+                  <Send className="size-5 stroke-white" />
+                </Button>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </motion.div>
     </div>
   )
 }

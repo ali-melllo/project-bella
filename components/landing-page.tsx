@@ -672,7 +672,7 @@ export function LandingPage() {
                       <label className="block text-sm font-medium mb-2">Message</label>
                       <Textarea className="glass-inset" rows={4} placeholder="Tell us more about your inquiry..." />
                     </div>
-                    <Button className="w-full glass-button bg-gradient-primary text-white border-0">Send Message</Button>
+                    <Button className="w-full text-white border-0">Send Message</Button>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -773,9 +773,10 @@ export function LandingPage() {
             <div className="absolute h-20 w-full top-0 bg-gradient-to-b from-background to-transparent" />
             <div className="absolute h-20 w-full bottom-0 bg-gradient-to-t from-background to-transparent" />
 
-            <h2 className="text-6xl md:text-8xl z-50 lg:text-9xl font-bold bg-gradient-to-br from-primary  to-primary/75 bg-clip-text text-transparent ">
+            {/* <h2 className="text-6xl md:text-8xl z-50 lg:text-9xl font-bold bg-gradient-to-br from-primary  to-primary/75 bg-clip-text text-transparent ">
               Bella AI
-            </h2>
+            </h2> */}
+
 
           </motion.div>
 
