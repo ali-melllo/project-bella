@@ -240,7 +240,7 @@ export function LandingPage() {
     <>
 
       <div className="fixed z-50 bottom-7 right-7 ">
-        <FixedAIAssistant />
+        <FixedAIAssistant showBubble={false}/>
       </div>
 
       <section className="relative min-h-screen w-full flex z-20 items-center overflow-x-hidden md:pt-16 mb-20 px-3 md:px-20">
