@@ -233,7 +233,7 @@ We offer a collaborative work environment, opportunities for professional growth
                 </Button>
                 <Button
                   onClick={handleApply}
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                  className="bg-gradient-to-r from-primary to-primary/50"
                 >
                   Apply Now
                   <ExternalLink className="w-4 h-4 ml-2" />

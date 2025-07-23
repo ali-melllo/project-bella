@@ -15,120 +15,129 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import { ModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { JobDetailModal } from "@/components/job-detail-modal"
+import { FixedAIAssistant } from "@/components/fixed-ai-assistant"
 
 // Mock job data
 const jobsData = [
   {
     id: 1,
-    title: "Frontend Developer",
-    company: "TechNova",
+    title: "House Cleaner",
+    company: "Shiny Homes",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Amsterdam",
-    remote: true,
-    salary: "€60,000–€75,000",
+    location: "Tehran",
+    remote: false,
+    salary: "60,000–90,000 Toman/hour",
     type: "Full-time",
     postedDate: "3 days ago",
-    category: ["Frontend", "React", "TypeScript"],
+    category: ["Cleaning", "Deep Clean", "Disinfection"],
   },
   {
     id: 2,
-    title: "UX/UI Designer",
-    company: "DesignHub",
+    title: "Plumber",
+    company: "PipeFix",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Rotterdam",
-    remote: true,
-    salary: "€55,000–€70,000",
+    location: "Karaj",
+    remote: false,
+    salary: "100,000–150,000 Toman/hour",
     type: "Full-time",
     postedDate: "1 week ago",
-    category: ["Design", "Figma", "UI/UX"],
+    category: ["Plumbing", "Leak Fix", "Water Pipes"],
   },
   {
     id: 3,
-    title: "Backend Engineer",
-    company: "ServerStack",
+    title: "Electrician",
+    company: "SafeWires",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Utrecht",
+    location: "Shiraz",
     remote: false,
-    salary: "€65,000–€85,000",
+    salary: "120,000–180,000 Toman/hour",
     type: "Full-time",
     postedDate: "2 days ago",
-    category: ["Backend", "Node.js", "Python"],
+    category: ["Electrical", "Wiring", "Repair"],
   },
   {
     id: 4,
-    title: "Marketing Specialist",
-    company: "GrowthGenius",
+    title: "Gardener",
+    company: "Green Leaf",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "The Hague",
-    remote: true,
-    salary: "€45,000–€60,000",
+    location: "Tabriz",
+    remote: false,
+    salary: "80,000–110,000 Toman/hour",
     type: "Full-time",
     postedDate: "5 days ago",
-    category: ["Marketing", "SEO", "Content"],
+    category: ["Gardening", "Landscaping", "Lawn Care"],
   },
   {
     id: 5,
-    title: "Data Scientist",
-    company: "DataMinds",
+    title: "Painter",
+    company: "ColorPro",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Eindhoven",
+    location: "Mashhad",
     remote: false,
-    salary: "€70,000–€90,000",
+    salary: "90,000–130,000 Toman/hour",
     type: "Full-time",
     postedDate: "1 day ago",
-    category: ["Data Science", "Python", "ML"],
+    category: ["Painting", "Interior", "Walls"],
   },
   {
     id: 6,
-    title: "Product Manager",
-    company: "ProductPro",
+    title: "AC Repair Technician",
+    company: "CoolFix",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Amsterdam",
-    remote: true,
-    salary: "€65,000–€85,000",
+    location: "Tehran",
+    remote: false,
+    salary: "150,000–200,000 Toman/hour",
     type: "Full-time",
     postedDate: "4 days ago",
-    category: ["Product", "Management", "Agile"],
+    category: ["AC", "Installation", "Cooling"],
   },
   {
     id: 7,
-    title: "DevOps Engineer",
-    company: "CloudNative",
+    title: "Pest Control Expert",
+    company: "BugAway",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Rotterdam",
-    remote: true,
-    salary: "€70,000–€90,000",
+    location: "Qom",
+    remote: false,
+    salary: "110,000–140,000 Toman/hour",
     type: "Full-time",
     postedDate: "2 weeks ago",
-    category: ["DevOps", "AWS", "Kubernetes"],
+    category: ["Pest Control", "Insects", "Rodents"],
   },
   {
     id: 8,
-    title: "Content Writer",
-    company: "ContentCraft",
+    title: "Babysitter",
+    company: "CareNest",
     logo: "/placeholder.svg?height=40&width=40",
-    location: "Utrecht",
-    remote: true,
-    salary: "€40,000–€55,000",
+    location: "Isfahan",
+    remote: false,
+    salary: "50,000–80,000 Toman/hour",
     type: "Part-time",
     postedDate: "3 days ago",
-    category: ["Content", "Writing", "SEO"],
+    category: ["Childcare", "Babysitting", "Evening Care"],
   },
-]
+];
 
 
 // Location options
-const locations = ["Amsterdam", "Rotterdam", "Utrecht", "The Hague", "Eindhoven", "All Locations"]
+const locations = ["Tehran", "Karaj", "Shiraz", "Mashhad", "Tabriz", "Isfahan", "Qom", "All Locations"];
 
 // Job types
-const jobTypes = ["Full-time", "Part-time", "Contract", "Internship"]
+const jobTypes = ["Full-time", "Part-time", "Contract", "Internship"];
 
 // Job categories
-const categories = ["Frontend", "Backend", "Design", "Marketing", "Data Science", "Product", "DevOps", "Content"]
+const categories = [
+  "Cleaning",
+  "Plumbing",
+  "Electrical",
+  "Gardening",
+  "Painting",
+  "AC",
+  "Pest Control",
+  "Childcare",
+];
 
 export default function JobsPage() {
   const [searchTerm, setSearchTerm] = useState("")
@@ -146,21 +155,6 @@ export default function JobsPage() {
 
   const [selectedJob, setSelectedJob] = useState<any>(null)
   const [isJobDetailOpen, setIsJobDetailOpen] = useState(false)
-
-     // AI Chat states
-     const [isAiChatOpen, setIsAiChatOpen] = useState(false)
-     const [chatMessages, setChatMessages] = useState<any[]>([
-         {
-             id: "1",
-             content:
-                 "Hello! I'm your AI Job assistant. I can help you find the perfect Job based on your preferences, and lifestyle. What kind of Job are you looking for?",
-             sender: "ai",
-             timestamp: new Date(Date.now() - 300000),
-         },
-     ])
-     const [chatInput, setChatInput] = useState("")
-     const [isTyping, setIsTyping] = useState(false)
-     const chatScrollRef = useRef<HTMLDivElement>(null)
 
   // Simulate loading
   useEffect(() => {
@@ -291,13 +285,13 @@ export default function JobsPage() {
   return (
     <div className="min-h-screen pt-20 md:pt-24 max-w-7xl mx-auto ">
       {/* Header */}
-      
+
 
       <div className=" mx-auto px-4 md:px-0 py-6">
         <div className="flex flex-col md:flex-row gap-6">
           {/* Sidebar - Desktop */}
           <div className="hidden md:block w-64 flex-shrink-0">
-            <Card className="sticky top-24 p-3 bg-card/50 backdrop-blur-sm border border-border/50">
+            <Card className="sticky top-24 bg-card/50 backdrop-blur-sm border border-border/50">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">Filters</CardTitle>
@@ -631,7 +625,7 @@ export default function JobsPage() {
                       transition={{ duration: 0.2 }}
                     >
                       <Card
-                        className={`bg-card/50 p-3 backdrop-blur-sm border border-border/50 shadow-md hover:shadow-lg transition-all duration-300 ${viewMode === "list" ? "flex flex-col md:flex-row md:items-center" : ""
+                        className={`bg-card/50 backdrop-blur-sm border border-border/50 shadow-md hover:shadow-lg transition-all duration-300 ${viewMode === "list" ? "flex flex-col md:flex-row md:items-center" : ""
                           }`}
                       >
                         <div className={viewMode === "list" ? "flex-1" : ""}>
@@ -656,17 +650,17 @@ export default function JobsPage() {
                             <div className="flex items-center justify-between space-x-2 mb-3">
                               <div className="flex items-center gap-2">
 
-                              <Avatar className="w-8 h-8">
-                                <AvatarImage src={job.logo || "/placeholder.svg"} alt={job.company} />
-                                <AvatarFallback>{job.company[0]}</AvatarFallback>
-                              </Avatar>
-                              <span className="font-medium text-xs line-clamp-1">{job.company}</span>
+                                <Avatar className="w-8 h-8">
+                                  <AvatarImage src={job.logo || "/placeholder.svg"} alt={job.company} />
+                                  <AvatarFallback>{job.company[0]}</AvatarFallback>
+                                </Avatar>
+                                <span className="font-medium text-xs line-clamp-1">{job.company}</span>
                               </div>
 
                               <div className="ml-auto">
-                                <div className="relative rounded-2xl justify-center flex items-center gap-1 border dark:text-purple-400 font-medium text-purple-500 bg-background text-sm px-3 py-1 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+                                <div className="relative rounded-2xl justify-center flex items-center gap-1 border dark:text-purple-400 font-medium text-purple-500 bg-background text-xs px-3 py-1 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
                                   <Sparkles size={15} />
-                                  <p className="text-primary text-sm text-nowrap font-bold">%87</p>
+                                  <p className="text-primary text-nowrap font-bold">%87</p>
                                   AI Matched
                                 </div>
                               </div>
@@ -693,8 +687,8 @@ export default function JobsPage() {
                         <CardFooter className={`${viewMode === "list" ? "md:border-l md:pl-6 md:pr-4 md:py-4" : ""}`}>
                           <div
                             className={`flex ${viewMode === "list"
-                                ? "flex-col md:flex-row md:items-center md:space-x-4"
-                                : "justify-between items-center w-full"
+                              ? "flex-col md:flex-row md:items-center md:space-x-4"
+                              : "justify-between items-center w-full"
                               }`}
                           >
                             <div className="flex flex-wrap gap-2 mb-3 md:mb-0">
@@ -706,11 +700,10 @@ export default function JobsPage() {
                               {job.category.length > 2 && <Badge variant="outline">+{job.category.length - 2}</Badge>}
                             </div>
                             <Button
-                              size={viewMode === "list" ? "sm" : "default"}
-                              onClick={()=> {
+                              onClick={() => {
                                 handleJobClick(job)
                               }}
-                              className="text-white bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                              className="text-white bg-gradient-to-r px-5 h-8 from-primary to-primary/50"
                             >
                               Apply
                             </Button>
@@ -743,102 +736,22 @@ export default function JobsPage() {
               </div>
             )}
 
-             {/* AI Chat Fixed Button */}
-             <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                className="fixed bottom-6 right-6 z-40"
+            {/* AI Chat Fixed Button */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              className="fixed bottom-6 right-6 z-40"
             >
-                <div className="flex flex-col gap-3">
-                    <Button className="size-14 shadow-2xl rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 group">
-                        <Link href={'/map'}>
-                            <Map className="stroke-white"/>
-                        </Link>
-                    </Button>
+              <div className="flex flex-col gap-3">
+                <Button className="size-14 shadow-2xl rounded-full bg-gradient-to-r from-primary to-primary/50 ml-3 mb-5 transition-all duration-200 group">
+                  <Link href={'/map'}>
+                    <Map className="stroke-white" />
+                  </Link>
+                </Button>
 
-                    <Sheet open={isAiChatOpen} onOpenChange={setIsAiChatOpen}>
-                        <SheetTrigger asChild>
-                            <Button
-                                className="size-14 shadow-2xl rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 group"
-                            >
-                                <Bot className="w-6 h-6 stroke-white group-hover:scale-110 transition-transform" />
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="right" className="w-[90%] sm:w-[400px] z-[1000] p-0 flex flex-col">
-                            {/* Chat Header */}
-                            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-blue-500/10 to-purple-500/10">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <Bot className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold">Jobs AI Assistant</h3>
-                                        <p className="text-sm text-muted-foreground">Ask me about Jobs options</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Chat Messages */}
-                            <ScrollArea className="flex-1 p-4" ref={chatScrollRef}>
-                                <div className="space-y-4">
-                                    {chatMessages.map((message) => (
-                                        <div
-                                            key={message.id}
-                                            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                                        >
-                                            <div
-                                                className={`max-w-[80%] rounded-lg p-3 ${message.sender === "user"
-                                                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                                                    : "bg-muted/50 backdrop-blur-sm"
-                                                    }`}
-                                            >
-                                                <p className="text-sm leading-relaxed">{message.content}</p>
-                                                <p className="text-xs opacity-70 mt-1">
-                                                    {message.timestamp.toLocaleTimeString("en-US", {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                    })}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    {/* Typing Indicator */}
-                                    {isTyping && (
-                                        <div className="flex justify-start">
-                                            <div className="bg-muted/50 backdrop-blur-sm rounded-lg p-3">
-                                                <div className="flex space-x-1">
-                                                    <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
-                                                    <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-100"></div>
-                                                    <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-200"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </ScrollArea>
-
-                            {/* Chat Input */}
-                            <div className="p-4 border-t border-border/50">
-                                <div className="flex items-center space-x-2">
-                                    <Input
-                                        value={chatInput}
-                                        onChange={(e) => setChatInput(e.target.value)}
-                                        placeholder="Ask about housing options..."
-                                        className="flex-1 outline-none"
-                                    />
-                                    <Button
-                                        disabled={!chatInput.trim()}
-                                        className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                                    >
-                                        <Send className="size-5 stroke-white" />
-                                    </Button>
-                                </div>
-                            </div>
-                        </SheetContent>
-                    </Sheet>
-                </div>
+                <FixedAIAssistant />
+              </div>
             </motion.div>
           </div>
         </div>

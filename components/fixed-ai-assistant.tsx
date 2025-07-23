@@ -203,7 +203,7 @@ function ChatInterface({
   return (
     <div className="flex flex-col h-full ">
       {/* Chat Header */}
-      <div className="flex items-center p-3  justify-between border-b border-border/50 bg-gradient-to-r from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20">
+      <div className="flex items-center p-4  justify-between border-b border-border/50 bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
         <div className="flex items-center space-x-3">
           <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center shadow-lg">
             <MessageCircle className="w-5 h-5 text-white" />

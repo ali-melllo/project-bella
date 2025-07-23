@@ -104,7 +104,7 @@ export default function AdminPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 pt-24 p-6">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -112,7 +112,7 @@ export default function AdminPage() {
             <h1 className="text-3xl font-bold">Property Management</h1>
             <p className="text-muted-foreground">Sunset Gardens • 156 Units</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-4">
             <Button variant="outline" className="neo-button">
               <Download className="w-4 h-4 mr-2" />
               Export Report

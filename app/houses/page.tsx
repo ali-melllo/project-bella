@@ -42,6 +42,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
+import { FixedAIAssistant } from "@/components/fixed-ai-assistant"
 
 // Enhanced mock house data with more details
 const housesData = [
@@ -586,95 +587,13 @@ export default function HousesPage() {
                 className="fixed bottom-6 right-6 z-40"
             >
                 <div className="flex flex-col gap-3">
-                    <Button className="size-14 shadow-2xl rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 group">
+                    <Button className="size-14 ml-2 mb-5 shadow-2xl rounded-full bg-gradient-to-r from-primary to-primary/75 transition-all duration-200 group">
                         <Link href={'/map'}>
                             <Map className="stroke-white"/>
                         </Link>
                     </Button>
 
-                    <Sheet open={isAiChatOpen} onOpenChange={setIsAiChatOpen}>
-                        <SheetTrigger asChild>
-                            <Button
-                                className="size-14 shadow-2xl rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all duration-200 group"
-                            >
-                                <Bot className="w-6 h-6 stroke-white group-hover:scale-110 transition-transform" />
-                            </Button>
-                        </SheetTrigger>
-                        <SheetContent side="right" className="w-[90%] sm:w-[400px] p-0 flex flex-col">
-                            {/* Chat Header */}
-                            <div className="p-4 border-b border-border/50 bg-gradient-to-r from-blue-500/10 to-purple-500/10">
-                                <div className="flex items-center space-x-3">
-                                    <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-                                        <Bot className="w-5 h-5 text-white" />
-                                    </div>
-                                    <div>
-                                        <h3 className="font-semibold">Housing AI Assistant</h3>
-                                        <p className="text-sm text-muted-foreground">Ask me about housing options</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Chat Messages */}
-                            <ScrollArea className="flex-1 p-4" ref={chatScrollRef}>
-                                <div className="space-y-4">
-                                    {chatMessages.map((message) => (
-                                        <div
-                                            key={message.id}
-                                            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                                        >
-                                            <div
-                                                className={`max-w-[80%] rounded-lg p-3 ${message.sender === "user"
-                                                    ? "bg-gradient-to-r from-blue-500 to-purple-600 text-white"
-                                                    : "bg-muted/50 backdrop-blur-sm"
-                                                    }`}
-                                            >
-                                                <p className="text-sm leading-relaxed">{message.content}</p>
-                                                <p className="text-xs opacity-70 mt-1">
-                                                    {message.timestamp.toLocaleTimeString("en-US", {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                    })}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    ))}
-
-                                    {/* Typing Indicator */}
-                                    {isTyping && (
-                                        <div className="flex justify-start">
-                                            <div className="bg-muted/50 backdrop-blur-sm rounded-lg p-3">
-                                                <div className="flex space-x-1">
-                                                    <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce"></div>
-                                                    <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-100"></div>
-                                                    <div className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce delay-200"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
-                            </ScrollArea>
-
-                            {/* Chat Input */}
-                            <div className="p-4 border-t border-border/50">
-                                <div className="flex items-center space-x-2">
-                                    <Input
-                                        value={chatInput}
-                                        onChange={(e) => setChatInput(e.target.value)}
-                                        onKeyPress={handleKeyPress}
-                                        placeholder="Ask about housing options..."
-                                        className="flex-1 outline-none"
-                                    />
-                                    <Button
-                                        onClick={handleSendMessage}
-                                        disabled={!chatInput.trim()}
-                                        className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-                                    >
-                                        <Send className="size-5 stroke-white" />
-                                    </Button>
-                                </div>
-                            </div>
-                        </SheetContent>
-                    </Sheet>
+                    <FixedAIAssistant showBubble={false}/>
                 </div>
             </motion.div>
 

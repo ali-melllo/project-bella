@@ -269,7 +269,7 @@ export default function ChatPage() {
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim()}
-                className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="size-6 stroke-white" />
               </Button>
