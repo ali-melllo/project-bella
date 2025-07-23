@@ -34,6 +34,8 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
+import { useSelector } from "react-redux"
+import { RootState } from "@/lib/store/store"
 
 // Language options
 const languages = [
@@ -66,19 +68,10 @@ export function SiteHeader() {
   const [isAuthenticated, setIsAuthenticated] = useState(false) // For demo purposes
   const { theme, setTheme } = useTheme()
 
+  const user = useSelector((state: RootState) => state.user || []);
+
   const path = usePathname();
   const router = useRouter();
-
-
-  useEffect(() => {
-    const fullName = localStorage.getItem("fullName");
-    const token = localStorage.getItem("token");
-    const email = localStorage.getItem("email");
-
-    setToken(token || "");
-    setFullName(fullName || "");
-    setEmail(email || "");
-  }, [])
 
   useEffect(() => {
     setMounted(true);
@@ -95,17 +88,31 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-
+  
   useEffect(() => {
-    if (token && fullName && email) {
-      setIsAuthenticated(true)
+    if (user.email && user.fullName) {
+      setIsAuthenticated(true);
+      setEmail(user.email);
+      setFullName(user.fullName);
     }
-  }, [token, fullName, email])
+  }, [user])
 
-  console.log(isAuthenticated)
+
+  const handleLogOut = () => {
+    localStorage.removeItem("email")
+    localStorage.removeItem("fullName")
+    localStorage.removeItem("token")
+    setIsAuthenticated(false)
+    setFullName("")
+    setEmail("")
+    setToken("")
+    router.replace("/")
+  }
+  
 
   if (!mounted) return null
 
+  console.log(user)
   return (
     <motion.header
       className={`fixed top-0 z-[1000] left-0 right-0   ${isScrolled ? "bg-transparent" : "backdrop-blur-xl bg-background [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset] "}  transition-all duration-300 ease-in-out`}
@@ -216,7 +223,7 @@ export function SiteHeader() {
                       <p className="text-xs text-muted-foreground">{email}</p>
                     </div>
 
-                    <Avatar className="size-10">
+                    <Avatar className="size-10 cursor-pointer">
                       <AvatarFallback className="bg-gradient-to-br from-primary/75 to-primary text-white">
                         {fullName.charAt(0)}{fullName.charAt(1)}
                       </AvatarFallback>
@@ -240,7 +247,9 @@ export function SiteHeader() {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem >
+                  <DropdownMenuItem 
+                  onClick={handleLogOut}
+                  >
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign out
                   </DropdownMenuItem>
@@ -363,6 +372,7 @@ export function SiteHeader() {
                         <Button
                           variant="outline"
                           className="w-full flex items-center justify-center"
+                          onClick={handleLogOut}
                         >
                           <LogOut className="w-4 h-4 mr-2" />
                           Sign out

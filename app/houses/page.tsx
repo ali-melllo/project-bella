@@ -41,7 +41,6 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { ModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 
 // Enhanced mock house data with more details
@@ -553,7 +552,7 @@ export default function HousesPage() {
 
     // Skeleton loader for house cards
     const HouseCardSkeleton = () => (
-        <Card className="overflow-hidden bg-card/50 backdrop-blur-sm border border-border/50 shadow-md hover:shadow-lg transition-all duration-300">
+        <Card className="overflow-hidden w-80 bg-card/50 backdrop-blur-sm border border-border/50 shadow-md hover:shadow-lg transition-all duration-300">
             <div className="aspect-[4/3] w-full bg-muted/70 animate-pulse"></div>
             <CardContent className="p-4">
                 <div className="space-y-3">
@@ -679,11 +678,11 @@ export default function HousesPage() {
                 </div>
             </motion.div>
 
-            <div className=" mx-auto py-6 px-4 md:px-0">
-                <div className="flex flex-col md:flex-row gap-6">
+            <div className="mx-auto py-6 px-4 md:px-0 w-full">
+                <div className="flex flex-col md:flex-row gap-6 w-full">
                     {/* Sidebar - Desktop */}
                     <div className="hidden md:block w-72 flex-shrink-0">
-                        <Card className="sticky top-24 p-4 bg-card/50 backdrop-blur-sm border border-border/50">
+                        <Card className="sticky top-24 bg-card/50 backdrop-blur-sm border border-border/50">
                             <CardHeader className="pb-3">
                                 <div className="flex items-center justify-between">
                                     <h3 className="text-lg font-semibold">Filters</h3>
@@ -876,7 +875,7 @@ export default function HousesPage() {
                         {/* House Cards */}
                         {isLoading ? (
                             <div
-                                className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+                                className={`grid gap-6 w-full ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
                                     }`}
                             >
                                 {[...Array(6)].map((_, index) => (
@@ -885,7 +884,7 @@ export default function HousesPage() {
                             </div>
                         ) : filteredHouses.length > 0 ? (
                             <div
-                                className={`grid gap-6 ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+                                className={`w-full grid gap-6 ${viewMode === "grid" ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
                                     }`}
                             >
                                 <AnimatePresence>
@@ -933,12 +932,10 @@ export default function HousesPage() {
 
                                                     {/* AI Match Circle */}
                                                     <div className="absolute bottom-3 right-3">
-                                                        <div className="relative rounded-2xl flex items-center gap-2 border dark:text-purple-400 font-medium text-purple-500 bg-background text-sm px-4 py-2 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
-                                                          <Sparkles size={15}/>
+                                                        <div className="relative rounded-2xl flex items-center gap-2 border text-muted-foreground font-medium bg-background text-sm px-4 py-2 [box-shadow:0_0_0_1px_rgba(0,0,0,.03),0_2px_4px_rgba(0,0,0,.05),0_12px_24px_rgba(0,0,0,.05)] transform-gpu dark:[border:1px_solid_rgba(255,255,255,.1)] dark:[box-shadow:0_-20px_80px_-20px_#ffffff1f_inset]">
+                                                          <Sparkles color="#ea580c" size={15}/>
                                                            <p className="text-primary font-bold">%{house.match} </p>
-                                                           
-                                                           AI Matched
-                                                           
+                                                            AI Matched
                                                         </div>
                                                     </div>
                                                 </div>
@@ -980,7 +977,7 @@ export default function HousesPage() {
 
                                                 <CardFooter className="p-4 pt-0">
                                                     <Button
-                                                        className="w-full bg-gradient-to-r text-white from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+                                                        className="w-full bg-gradient-to-r text-white from-primary/75 to-primary"
                                                         onClick={() => openHouseDetail(house)}
                                                     >
                                                         View Details
@@ -1018,7 +1015,7 @@ export default function HousesPage() {
 
             {/* House Detail Modal */}
             <Dialog open={isDetailModalOpen} onOpenChange={setIsDetailModalOpen}>
-                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
                     {selectedHouse && (
                         <>
                             <DialogHeader>

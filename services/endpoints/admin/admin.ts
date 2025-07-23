@@ -1,3 +1,4 @@
+import { setUser } from '@/lib/store/slices/userSlice';
 import { api } from '../../api';
 import {
   AdminAttributesLoginParamsType,
@@ -6,7 +7,7 @@ import {
 
 export const adminApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    loginUser: builder.mutation<
+    signUpUser: builder.mutation<
       AdminAttributesResponse,
       Partial<AdminAttributesLoginParamsType>>({
       query: (newUser) => ({
@@ -15,10 +16,32 @@ export const adminApi = api.injectEndpoints({
         body: newUser,
       }),
     }),
-   
+    loginUser: builder.mutation<
+      AdminAttributesResponse,
+      Partial<AdminAttributesLoginParamsType>>({
+      query: (newUser) => ({
+        url: 'auth/login',
+        method: 'POST',
+        body: newUser,
+      }),
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          
+          dispatch(
+            setUser({
+              ...data.user,
+            })
+          );
+        } catch {
+          // Optional: handle error
+        }
+      },
+    }),
   }),
 });
 
 export const {
-  useLoginUserMutation,
+  useSignUpUserMutation,
+  useLoginUserMutation
 } = adminApi;

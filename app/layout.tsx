@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { LanguageProvider } from "@/components/language-provider"
 import { SiteHeader } from "@/components/ui/header"
 import { Providers } from "./providers"
+import AppInitializer from "./auth-provider"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -30,15 +31,17 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <LanguageProvider>
-            <div className="w-full relative flex flex-col">
-              <SiteHeader />
-              {children}
-            </div>
+          <AppInitializer>
             <Toaster />
-          </LanguageProvider>
-        </ThemeProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+              <LanguageProvider>
+                <div className="w-full relative flex flex-col">
+                  <SiteHeader />
+                  {children}
+                </div>
+              </LanguageProvider>
+            </ThemeProvider>
+          </AppInitializer>
         </Providers>
       </body>
     </html>

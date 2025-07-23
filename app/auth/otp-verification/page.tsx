@@ -11,18 +11,25 @@ import { Shield, ArrowLeft, RefreshCw } from "lucide-react"
 import Link from "next/link"
 import AnimatedBackground from "@/components/magicui/animated-background"
 import { SignupFormData } from "../signup/page"
-import { useLoginUserMutation } from "@/services/endpoints/admin/admin"
+import { useLoginUserMutation, useSignUpUserMutation } from "@/services/endpoints/admin/admin"
 import { setAuthToken } from "@/services/auth/action"
 import { toast } from "sonner"
+import { setUser } from "@/lib/store/slices/userSlice"
+import { useDispatch } from "react-redux"
 
-export default function OTPVerificationPage({ data }: { data: any }) {
+export default function OTPVerificationPage({ data, isForLogin }: { data: any, isForLogin: boolean }) {
+  
+  const dispatch = useDispatch();
+
   const [otp, setOtp] = useState(["", "", "", ""])
   const [resendTimer, setResendTimer] = useState(30)
   const [canResend, setCanResend] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const router = useRouter()
 
-  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [signUpUser, { isLoading }] = useSignUpUserMutation();
+  const [loginUser, { isLoading: signInLoading }] = useLoginUserMutation();
+
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -56,13 +63,22 @@ export default function OTPVerificationPage({ data }: { data: any }) {
     e.preventDefault()
     if (otp.join("").length !== 4) return
 
-    const response = await loginUser({...data , otp : "1111"}).unwrap();
-        await setAuthToken(response.token);
-        localStorage.setItem("email", response.user.email);
-        localStorage.setItem("fullName", response.user.fullName);
-        localStorage.setItem("token", response.token);
-        toast("Account Created Successfully")
-        router.push("/");
+    if (isForLogin) {
+      const response = await loginUser({ ...data, otp: "1111" }).unwrap();
+      await setAuthToken(response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+      dispatch(setUser(response.user));
+      toast("Logged In Successfully")
+      router.replace("/");
+    } else {
+      const response = await signUpUser({ ...data, otp: "1111" }).unwrap();
+      await setAuthToken(response.token);
+      localStorage.setItem("user", JSON.stringify(response.user));
+      dispatch(setUser(response.user));
+      toast("Account Created Successfully");
+      router.replace("/");
+    }
+
   }
 
   const handleResend = () => {
@@ -115,8 +131,8 @@ export default function OTPVerificationPage({ data }: { data: any }) {
             </div>
 
             {/* Verify Button */}
-            <Button type="submit" className="w-full neo-button" disabled={isLoading || otp.join("").length !== 4}>
-              {isLoading ? (
+            <Button type="submit" className="w-full neo-button" disabled={isLoading || otp.join("").length !== 4 || signInLoading}>
+              {(isLoading || signInLoading) ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
                   Verifying...

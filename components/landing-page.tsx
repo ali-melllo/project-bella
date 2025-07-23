@@ -263,7 +263,7 @@ export function LandingPage() {
             alt="Bella"
             width={2000}
             height={2000}
-            className="object-cover size-full"
+            className="object-cover size-full "
             priority
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent"></div>

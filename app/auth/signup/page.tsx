@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form"
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -11,11 +10,9 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
-import { Loader, User } from "lucide-react"
+import { User } from "lucide-react"
 import AnimatedBackground from "@/components/magicui/animated-background"
 import { toast } from "sonner"
-import { useLoginUserMutation } from "@/services/endpoints/admin/admin"
-import { setAuthToken } from "@/services/auth/action"
 import OTPVerificationPage from "../otp-verification/page"
 
 export interface SignupFormData {
@@ -143,6 +140,6 @@ export default function SignupPage() {
           </div>
         </CardContent>
       </Card>
-    </div> : <OTPVerificationPage data={signUpData}/>
+    </div> : <OTPVerificationPage isForLogin={false} data={signUpData}/>
   )
 }
