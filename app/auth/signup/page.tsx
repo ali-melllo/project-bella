@@ -11,13 +11,14 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Separator } from "@/components/ui/separator"
-import { User } from "lucide-react"
+import { Loader, User } from "lucide-react"
 import AnimatedBackground from "@/components/magicui/animated-background"
 import { toast } from "sonner"
 import { useLoginUserMutation } from "@/services/endpoints/admin/admin"
 import { setAuthToken } from "@/services/auth/action"
+import OTPVerificationPage from "../otp-verification/page"
 
-interface SignupFormData {
+export interface SignupFormData {
   fullName: string
   email: string
   phone: string
@@ -26,8 +27,9 @@ interface SignupFormData {
 
 export default function SignupPage() {
 
-  const router = useRouter()
-  const [loginUser, { isLoading }] = useLoginUserMutation();
+  const [showOtpPage , setShowOtpPage] = useState<boolean>(false);
+  const [signUpData , setSignUpData] = useState<SignupFormData>();
+
 
   const {
     register,
@@ -37,19 +39,15 @@ export default function SignupPage() {
 
   const onSubmit = async (data: SignupFormData) => {
     try {
-      const response = await loginUser(data).unwrap();
-        await setAuthToken(response.data.token);
-
-        localStorage.setItem("userEmail", response.data.admin.email);
-        localStorage.setItem("token", response.data.token);
-        toast("Account Created Successfully")
-        router.push("/auth/otp-verification");
+      setShowOtpPage(true);
+      setSignUpData(data);
+    
     } catch (error) {
       toast("error")
     } 
   }
 
-  return (
+  return  ( !showOtpPage ?
     <div className="min-h-screen bg-gradient-to-br pt-10 from-background via-background to-muted/20 flex items-center justify-center p-4">
       <AnimatedBackground />
 
@@ -107,7 +105,7 @@ export default function SignupPage() {
             {/* Terms and Privacy */}
             <div className="space-y-3">
               <div className="flex items-start space-x-2">
-                {/* <Checkbox id="terms" {...register("terms", { required: true })} /> */}
+                <Checkbox />
                 <Label htmlFor="terms" className="text-sm leading-relaxed">
                   I agree to the{" "}
                   <Link href="/terms" className="text-primary hover:underline">Terms of Service</Link>{" "}
@@ -126,18 +124,11 @@ export default function SignupPage() {
             </div>
 
             {/* Submit */}
-            <Button type="submit" className="w-full neo-button" disabled={isLoading}>
-              {isLoading ? (
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
-                  Creating account...
-                </div>
-              ) : (
+            <Button type="submit" className="w-full neo-button">  
                 <>
                   <User className="w-4 h-4 mr-2" />
                   Create Account
                 </>
-              )}
             </Button>
           </form>
 
@@ -152,6 +143,6 @@ export default function SignupPage() {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div> : <OTPVerificationPage data={signUpData}/>
   )
 }

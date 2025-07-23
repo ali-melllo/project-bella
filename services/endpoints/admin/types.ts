@@ -1,15 +1,14 @@
 export interface AdminAttributesResponse {
-  data: {
-    admin: {
+  
+    user: {
       id: string;
-      name: string;
-      password: string;
+      fullName: string;
       email: string;
       active: boolean;
-      permissions: [];
+      phone:string
     };
     token: string;
-  };
+  
 }
 
 export interface AdminAttributesLoginParamsType {

@@ -9,14 +9,20 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Shield, ArrowLeft, RefreshCw } from "lucide-react"
 import Link from "next/link"
+import AnimatedBackground from "@/components/magicui/animated-background"
+import { SignupFormData } from "../signup/page"
+import { useLoginUserMutation } from "@/services/endpoints/admin/admin"
+import { setAuthToken } from "@/services/auth/action"
+import { toast } from "sonner"
 
-export default function OTPVerificationPage() {
-  const [otp, setOtp] = useState(["", "", "", "", "", ""])
-  const [isLoading, setIsLoading] = useState(false)
+export default function OTPVerificationPage({ data }: { data: any }) {
+  const [otp, setOtp] = useState(["", "", "", ""])
   const [resendTimer, setResendTimer] = useState(30)
   const [canResend, setCanResend] = useState(false)
   const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   const router = useRouter()
+
+  const [loginUser, { isLoading }] = useLoginUserMutation();
 
   useEffect(() => {
     if (resendTimer > 0) {
@@ -48,13 +54,15 @@ export default function OTPVerificationPage() {
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (otp.join("").length !== 6) return
+    if (otp.join("").length !== 4) return
 
-    setIsLoading(true)
-    // Simulate verification
-    setTimeout(() => {
-      router.push("/auth/biometric-setup")
-    }, 1500)
+    const response = await loginUser({...data , otp : "1111"}).unwrap();
+        await setAuthToken(response.token);
+        localStorage.setItem("email", response.user.email);
+        localStorage.setItem("fullName", response.user.fullName);
+        localStorage.setItem("token", response.token);
+        toast("Account Created Successfully")
+        router.push("/");
   }
 
   const handleResend = () => {
@@ -64,7 +72,8 @@ export default function OTPVerificationPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br pt-10 from-background via-background to-muted/20 flex items-center justify-center p-4">
+      <AnimatedBackground />
       <Card className="w-full max-w-md neo-card">
         <CardHeader className="text-center space-y-4">
           <Link
@@ -81,7 +90,7 @@ export default function OTPVerificationPage() {
 
           <div>
             <CardTitle className="text-2xl font-bold">Verify Your Account</CardTitle>
-            <CardDescription>We've sent a 6-digit code to your phone number ending in ****67</CardDescription>
+            <CardDescription>We've sent a 4-digit code to your phone number ending in **11</CardDescription>
           </div>
         </CardHeader>
 
@@ -92,7 +101,7 @@ export default function OTPVerificationPage() {
               {otp.map((digit, index) => (
                 <Input
                   key={index}
-                  ref={(el) => (inputRefs.current[index] = el)}
+                  ref={(el: any) => (inputRefs.current[index] = el)}
                   type="text"
                   inputMode="numeric"
                   maxLength={1}
@@ -106,7 +115,7 @@ export default function OTPVerificationPage() {
             </div>
 
             {/* Verify Button */}
-            <Button type="submit" className="w-full neo-button" disabled={isLoading || otp.join("").length !== 6}>
+            <Button type="submit" className="w-full neo-button" disabled={isLoading || otp.join("").length !== 4}>
               {isLoading ? (
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />

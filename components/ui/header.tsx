@@ -32,7 +32,7 @@ import {
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
 
 // Language options
@@ -57,14 +57,28 @@ const navigationItems = [
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [token, setToken] = useState<string>("")
+  const [fullName, setFullName] = useState("")
+  const [email, setEmail] = useState("")
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [currentLanguage, setCurrentLanguage] = useState(languages[0])
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false) // For demo purposes
   const { theme, setTheme } = useTheme()
 
   const path = usePathname();
+  const router = useRouter();
+
+
+  useEffect(() => {
+    const fullName = localStorage.getItem("fullName");
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
+
+    setToken(token || "");
+    setFullName(fullName || "");
+    setEmail(email || "");
+  }, [])
 
   useEffect(() => {
     setMounted(true);
@@ -81,11 +95,14 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Toggle authentication (for demo purposes)
-  const toggleAuth = () => {
-    setIsAuthenticated(!isAuthenticated)
-  }
 
+  useEffect(() => {
+    if (token && fullName && email) {
+      setIsAuthenticated(true)
+    }
+  }, [token, fullName, email])
+
+  console.log(isAuthenticated)
 
   if (!mounted) return null
 
@@ -193,20 +210,24 @@ export function SiteHeader() {
             {isAuthenticated ? (
               <DropdownMenu open={isUserMenuOpen} onOpenChange={setIsUserMenuOpen}>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="default" className="relative rounded-full">
-                    <Avatar className="w-9 h-9">
-                      <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                        JD
+                  <div className="flex items-center justify-end gap-3">
+                    <div className="flex flex-col space-y-0.5">
+                      <p className="text-sm font-medium">{fullName}</p>
+                      <p className="text-xs text-muted-foreground">{email}</p>
+                    </div>
+
+                    <Avatar className="size-10">
+                      <AvatarFallback className="bg-gradient-to-br from-primary/75 to-primary text-white">
+                        {fullName.charAt(0)}{fullName.charAt(1)}
                       </AvatarFallback>
                     </Avatar>
-                    <span className="sr-only">User menu</span>
-                  </Button>
+                  </div>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuContent align="end" className="w-56 mt-5">
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-0.5">
-                      <p className="text-sm font-medium">John Doe</p>
-                      <p className="text-xs text-muted-foreground">john@example.com</p>
+                      <p className="text-sm font-medium">{fullName}</p>
+                      <p className="text-xs text-muted-foreground">{email}</p>
                     </div>
                   </div>
                   <DropdownMenuSeparator />
@@ -219,7 +240,7 @@ export function SiteHeader() {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={toggleAuth}>
+                  <DropdownMenuItem >
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign out
                   </DropdownMenuItem>
@@ -331,16 +352,15 @@ export function SiteHeader() {
                         <div className="flex items-center space-x-3">
                           <Avatar className="w-10 h-10">
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                              JD
+                              {fullName.charAt(0)}{fullName.charAt(1)}
                             </AvatarFallback>
                           </Avatar>
                           <div>
-                            <p className="font-medium">John Doe</p>
-                            <p className="text-xs text-muted-foreground">john@example.com</p>
+                            <p className="font-medium">{fullName}</p>
+                            <p className="text-xs text-muted-foreground">{email}</p>
                           </div>
                         </div>
                         <Button
-                          onClick={toggleAuth}
                           variant="outline"
                           className="w-full flex items-center justify-center"
                         >
@@ -351,7 +371,7 @@ export function SiteHeader() {
                     ) : (
                       <div className="px-4 py-2">
                         <Button
-                          onClick={toggleAuth}
+                          onClick={() => router.push("/auth/login")}
                           className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
                         >
                           <LogIn className="w-4 h-4 mr-2" />
