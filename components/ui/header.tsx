@@ -36,6 +36,8 @@ import { usePathname, useRouter } from "next/navigation"
 import Image from "next/image"
 import { useSelector } from "react-redux"
 import { RootState } from "@/lib/store/store"
+import { setUser } from "@/lib/store/slices/userSlice"
+import { useDispatch } from "react-redux"
 
 // Language options
 const languages = [
@@ -69,7 +71,7 @@ export function SiteHeader() {
   const { theme, setTheme } = useTheme()
 
   const user = useSelector((state: RootState) => state.user || []);
-
+  const dispatch = useDispatch();
   const path = usePathname();
   const router = useRouter();
 
@@ -88,7 +90,7 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  
+
   useEffect(() => {
     if (user.email && user.fullName) {
       setIsAuthenticated(true);
@@ -99,16 +101,20 @@ export function SiteHeader() {
 
 
   const handleLogOut = () => {
-    localStorage.removeItem("email")
-    localStorage.removeItem("fullName")
-    localStorage.removeItem("token")
+    localStorage.removeItem("user")
+    dispatch(setUser({
+      id: "",
+      fullName: "",
+      email: "",
+      avatar: ""
+    }));
     setIsAuthenticated(false)
     setFullName("")
     setEmail("")
     setToken("")
     router.replace("/")
   }
-  
+
 
   if (!mounted) return null
 
@@ -247,8 +253,8 @@ export function SiteHeader() {
                     Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                  onClick={handleLogOut}
+                  <DropdownMenuItem
+                    onClick={handleLogOut}
                   >
                     <LogOut className="w-4 h-4 mr-2" />
                     Sign out
