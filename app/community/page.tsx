@@ -266,7 +266,7 @@ export default function CommunityPage() {
                         </div>
 
                         <div className="flex gap-2">
-                          <Button size="sm" className="flex-1 neo-button">
+                          <Button size="sm" className="w-auto md:w-28 neo-button">
                             <MessageSquare className="w-4 h-4 mr-2" />
                             Connect
                           </Button>

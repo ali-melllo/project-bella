@@ -78,7 +78,7 @@ export default function ProfilePage() {
         <DesktopNav />
       </div>
 
-      <div className="lg:ml-64">
+      <div className="lg:ml-80">
         {/* Header */}
         <div className="sticky top-0 z-40 bg-background/80 backdrop-blur-lg border-b border-border/50">
           <div className="flex items-center justify-between p-4">

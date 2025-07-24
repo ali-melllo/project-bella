@@ -134,7 +134,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 lg:ml-64">
+        <div className="flex-1 lg:ml-80">
           {/* Header */}
           <header className="glass-header sticky top-0 z-40 border-b border-white/10">
             <div className="flex items-center justify-between h-16 px-4 lg:px-8">
