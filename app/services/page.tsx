@@ -29,7 +29,7 @@ const jobsData = [
     logo: "/placeholder.svg?height=40&width=40",
     location: "Tehran",
     remote: false,
-    salary: "60,000–9 €/hour",
+    salary: "6–9 €/hour",
     type: "Full-time",
     postedDate: "3 days ago",
     category: ["Cleaning", "Deep Clean", "Disinfection"],
